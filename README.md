@@ -27,7 +27,7 @@ cd tunmo-docs
 python3 -m http.server 4173 --directory docs --bind 127.0.0.1
 ```
 
-在浏览器访问 <http://127.0.0.1:4173/>。浏览本站无需安装 Node.js、pnpm、Agent 或 GIS Runtime。
+在浏览器访问 <http://127.0.0.1:4173/>。
 
 ## 仓库结构
 
