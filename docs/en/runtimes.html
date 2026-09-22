@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Share complete environments by content identity and bind every session to a traceable runtime version.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="alternate" hreflang="zh-CN" href="../runtimes.html">
+  <link rel="alternate" hreflang="en" href="runtimes.html">
+  <title>Runtimes and execution lifecycle · Tunmo Agent Docs</title>
+  <link rel="stylesheet" href="../assets/styles.css?v=48f5642436e5">
+  <script src="search-index.js?v=07c7821ab520" defer></script>
+  <script src="../assets/app.js?v=29a07a919544" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="scrim" hidden></div>
+  <aside class="sidebar" id="navigation" aria-label="Documentation navigation">
+    <div class="sidebar-header">
+      <a class="brand" href="index.html" aria-label="Tunmo documentation home"><span class="brand-logo" role="img" aria-label="Tunmo"></span></a>
+      <button class="menu-close icon-button" aria-label="Close navigation"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="edition">Agent documentation <span>Development</span></div>
+    <button class="search-trigger" aria-label="Search docs"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><span>Search docs</span><kbd>⌘ K</kbd></button>
+    <div class="sidebar-scroll"><nav aria-label="All documentation"><div class="nav-group"><p>Getting started</p><a href="index.html"><span>Welcome to Tunmo Agent</span></a><a href="quickstart.html"><span>Installation and quickstart</span></a><a href="configuration.html"><span>Configuration and data directories</span></a></div><div class="nav-group"><p>Core capabilities</p><a href="web-access.html"><span>Web search and page reading</span></a><a href="goals.html"><span>Goal mode</span></a><a href="skills.html"><span>Skills and knowledge reuse</span></a></div><div class="nav-group"><p>Geospatial</p><a href="modules.html"><span>Optional module management</span></a><a href="qgis.html"><span>QGIS spatial processing</span></a><a href="geopandas.html"><span>GeoPandas vector analysis</span></a></div><div class="nav-group"><p>Developer guide</p><a href="rpc.html"><span>Sessions and RPC integration</span></a><a href="extensions.html"><span>Extensions and SDK</span></a><a href="runtimes.html" aria-current="page"><span>Runtimes and execution lifecycle</span><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div><div class="nav-group"><p>Reference & support</p><a href="troubleshooting.html"><span>Troubleshooting</span></a><a href="reference.html"><span>Versions, scope, and maintenance</span></a></div></nav></div>
+    <div class="sidebar-bottom"><span class="status-dot"></span>English docs<span class="sidebar-tag">TUNMO AGENT</span></div>
+  </aside>
+  <div class="shell">
+    <header class="topbar">
+      <button class="menu-toggle icon-button" aria-label="Open navigation" aria-controls="navigation" aria-expanded="false"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div class="breadcrumb"><a href="index.html">Docs</a><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span title="Developer guide">Developer guide</span></div>
+      <div class="top-actions">
+        <nav class="language-selector" aria-label="Documentation language"><a class="language-option language-switch" href="../runtimes.html" lang="zh-CN" hreflang="zh-CN" aria-label="Switch to Chinese" title="Switch to Chinese">中文</a><span class="language-option" lang="en" aria-current="page">EN</span></nav>
+        <div class="language-dropdown">
+          <button class="language-trigger icon-button" type="button" aria-label="Change language" aria-expanded="false" aria-controls="language-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6m-7 0 6-6 2-3M2 5h12M7 2v3m15 17-5-11-5 11m2-4h6"/></svg><svg class="icon language-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+          <div class="language-menu" id="language-options" hidden>
+            <nav class="language-menu-options" aria-label="Documentation language">
+              <span class="language-menu-current" lang="en" aria-current="page">English</span>
+              <a class="language-menu-option language-switch" href="../runtimes.html" lang="zh-CN" hreflang="zh-CN" aria-label="Switch to Chinese">简体中文</a>
+            </nav>
+          </div>
+        </div>
+        <button class="search-trigger top-search icon-button" aria-label="Search docs"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></button>
+        <div class="download-control">
+          <button class="download-trigger icon-button" type="button" aria-label="Download" aria-expanded="false" aria-controls="download-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg></button>
+          <div class="download-menu" id="download-options" hidden>
+            <div class="download-options">
+              <a class="download-option" href="markdown/runtimes.md" download="runtimes.en.md"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h6"/></svg><span>Markdown document</span></a>
+            </div>
+          </div>
+        </div>
+        <span class="action-divider" aria-hidden="true"></span>
+        <button class="theme-toggle icon-button" aria-label="Switch to dark mode"><svg class="icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg></button>
+        <button class="phone-tools-toggle icon-button" type="button" aria-label="More options" aria-expanded="false" aria-controls="phone-tools-panel"><svg class="icon tools-open-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h12M4 12h16M12 18h8"/></svg><svg class="icon tools-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        <div class="phone-tools-panel" id="phone-tools-panel" role="region" aria-label="Reading options" hidden>
+          <div class="phone-language-control">
+            <button class="phone-language-trigger" type="button" aria-label="Change language, current: English" aria-expanded="false" aria-controls="phone-language-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6m-7 0 6-6 2-3M2 5h12M7 2v3m15 17-5-11-5 11m2-4h6"/></svg><span lang="en">English</span><svg class="icon language-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+            <div class="phone-language-menu" id="phone-language-options" hidden>
+              <nav class="phone-language-options" aria-label="Documentation language">
+                <span class="language-menu-current" lang="en" aria-current="page">English</span>
+                <a class="phone-language-option language-menu-option language-switch" href="../runtimes.html" lang="zh-CN" hreflang="zh-CN" aria-label="Switch to Chinese">简体中文</a>
+              </nav>
+            </div>
+          </div>
+          <div class="phone-appearance">
+            <span>Appearance</span>
+            <button class="theme-toggle phone-theme-toggle" type="button" role="switch" aria-label="Dark mode" aria-checked="false"><span class="theme-thumb"><svg class="icon theme-light-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-dark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg></span></button>
+          </div>
+          <a class="phone-download" href="markdown/runtimes.md" download="runtimes.en.md"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg><span>Markdown document</span></a>
+        </div>
+      </div>
+    </header>
+    <div class="reading-layout">
+      <main id="main" tabindex="-1">
+        <div class="page-heading ">
+          <div class="heading-content">
+            <div class="eyebrow"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M3 4c4-1 6 0 9 2 3-2 5-3 9-2v15c-4-1-6 0-9 2-3-2-5-3-9-2Z"/></svg><span>Developer guide</span></div>
+            <h1>Runtimes and execution lifecycle</h1>
+            <p class="lead">Share complete environments by content identity and bind every session to a traceable runtime version.</p>
+
+          </div>
+
+        </div>
+        <details class="mobile-toc"><summary><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>On this page<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></summary><div><a href="#section-1">What is a runtime?</a><a href="#section-2">Session snapshots and leases</a><a href="#section-3">Offline import</a><a href="#section-4">Startup and cleanup</a><a href="#section-5">Cloud execution boundaries</a></div></details>
+        <section><h2 id="section-1">What is a runtime?<a class="anchor" href="#section-1" aria-label="Link to What is a runtime?">#</a></h2><p>A runtime is a verified collection of interpreters, libraries, and entry points. Multiple extensions can reuse the same content. Environments with different digests or incompatible versions are kept separately; sharing does not merge site-packages directories.</p><p>binding: host validates the actual Node.js runtime used by the Agent, while binding: artifact selects an artifact on disk. Matching considers the version, operating system, architecture, ABI, minimum OS version, build identity, and digest.</p></section>
+        <section><h2 id="section-2">Session snapshots and leases<a class="anchor" href="#section-2" aria-label="Link to Session snapshots and leases">#</a></h2><p>A session locks its dependencies and acquires leases when it starts. After an upgrade, existing sessions retain their previous bindings, while new sessions select the new version. Garbage collection rechecks installations, rollback references, and active leases; only unreferenced resources can be deleted.</p><p>Revoking permissions when an optional module is disabled is independent of retaining its files. Keeping an old runtime does not mean an existing session can still execute a disabled module.</p></section>
+        <section><h2 id="section-3">Offline import<a class="anchor" href="#section-3" aria-label="Link to Offline import">#</a></h2><pre><code class="language-bash">node bin/tunmo-extension.mjs validate runtime /absolute/prepared/runtime
+node bin/tunmo-extension.mjs import-runtime /absolute/prepared/runtime</code></pre><p>The input must be a prepared runtime sealed with content digests. The management entry point does not run npm/pip installation scripts. Large directory imports are limited to 16 GiB and 200,000 files. The v1 .tunmo format retains limits of 512 MiB unpacked and 256 MiB compressed and cannot directly package large GIS environments.</p></section>
+        <section><h2 id="section-4">Startup and cleanup<a class="anchor" href="#section-4" aria-label="Link to Startup and cleanup">#</a></h2><p>A runtime can declare fixed arguments, bundled scripts, and environment settings through launch. An executable path from entrypoints alone does not replace the complete startup plan that includes launch.</p><p>Each subprocess invocation has its own task directory, supervisor, and execution lease. Unix uses process groups; Windows uses Job Objects. Stop the process tree before cleaning up directories and releasing resources. A timeout does not mean cleanup has finished.</p><p>The JSONL Worker protocol is separate from the external Pi RPC protocol. A Worker must return status, progress, and exactly one terminal state with the same request ID. Diagnostics from third-party libraries go to stderr.</p></section>
+        <section><h2 id="section-5">Cloud execution boundaries<a class="anchor" href="#section-5" aria-label="Link to Cloud execution boundaries">#</a></h2><p>Currently, only a mock backend enabled by an explicit policy is available, and execution still takes place locally. In <code>execution-policy.json</code>, explicitly set <code>executor: cloud</code>, <code>backend: mock</code>, and <code>allowDataTransfer</code> for each tool. A local failure does not automatically upload data or transfer execution to the cloud.</p><p>When a remote outcome is unknown, retain recovery information instead of blindly resubmitting a task with side effects. These adapter interfaces and mock tests do not mean a production cloud service is available.</p></section>
+        <details class="sources"><summary><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h6"/></svg>Sources · repository files<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></summary><ul><li><code>sdk/README.md</code></li><li><code>src/extension-host/runtime/resolver.ts</code></li><li><code>src/extension-host/management/archive.ts</code></li><li><code>src/extension-host/execution/contracts.ts</code></li><li><code>src/extension-host/execution/policy.ts</code></li><li><code>docs/runtime-declarative-launch.md</code></li><li><code>docs/runtime-channel.md</code></li></ul><p>Paths are relative to the repository root. Refer to the source in your current checkout.</p></details>
+        <nav class="pagination" aria-label="Previous and next pages"><a href="extensions.html"><small>Previous</small><span><svg class="icon reverse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>Extensions and SDK</span></a><a href="troubleshooting.html"><small>Next</small><span>Troubleshooting<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></a></nav>
+        <footer><span>Tunmo <span class="footer-dot">/</span> Agent</span><span>Source reviewed 2026-09-20 · See dated validation records</span></footer>
+      </main>
+      <aside class="toc" aria-label="Table of contents"><p>On this page</p><nav><a href="#section-1">What is a runtime?</a><a href="#section-2">Session snapshots and leases</a><a href="#section-3">Offline import</a><a href="#section-4">Startup and cleanup</a><a href="#section-5">Cloud execution boundaries</a></nav><div class="toc-bottom">Tools with context.<br>Work you can trace.</div><a class="back-to-top" href="#main">Back to top ↑</a></aside>
+    </div>
+  </div>
+  <dialog class="search-dialog" aria-label="Search docs">
+    <div class="search-box"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><input type="search" placeholder="Search features, tools, or errors…" aria-label="Search docs" autocomplete="off"><button class="close-search" aria-label="Close search">Esc</button></div>
+    <div class="search-results" aria-live="polite"></div>
+    <div class="search-help"><span>Local full-text search</span><span>↑ ↓ Select · Enter Open · Esc Close</span></div>
+  </dialog>
+  <div class="toast" role="status"></div>
+</body>
+</html>

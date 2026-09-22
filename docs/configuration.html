@@ -1,4 +1,90 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="理解模型配置、用户资源和运行数据分别保存在哪里。"><title>配置与数据目录 · Tunmo Agent 文档</title><link rel="stylesheet" href="assets/styles.css"><script src="assets/search-index.js" defer></script><script src="assets/app.js" defer></script></head><body><a class="skip" href="#main">跳到正文</a><div class="scrim" hidden></div><aside class="sidebar" id="navigation" aria-label="文档导航"><a class="brand" href="index.html" aria-label="Tunmo 文档首页"><span class="brand-logo" role="img" aria-label="Tunmo"></span></a><div class="edition">AGENT DOCUMENTATION <span>v0.1.0</span></div><button class="search-trigger"><span>⌕ &nbsp;搜索文档</span><kbd>⌘ K</kbd></button><nav><div class="nav-group"><p>开始使用</p><a href="index.html">欢迎使用 Tunmo Agent</a><a href="quickstart.html">安装与快速开始</a><a href="configuration.html" aria-current="page">配置与数据目录</a></div><div class="nav-group"><p>核心能力</p><a href="web-access.html">联网搜索与网页读取</a><a href="goals.html">目标模式 Goal</a><a href="skills.html">Skills 与知识复用</a></div><div class="nav-group"><p>地理空间能力</p><a href="modules.html">可选模块管理</a><a href="qgis.html">QGIS 空间处理</a><a href="geopandas.html">GeoPandas 矢量分析</a></div><div class="nav-group"><p>开发者指南</p><a href="rpc.html">会话与 RPC 接入</a><a href="extensions.html">扩展与 SDK</a><a href="runtimes.html">Runtime 与执行生命周期</a></div><div class="nav-group"><p>参考与支持</p><a href="troubleshooting.html">故障排查</a><a href="reference.html">版本、范围与文档维护</a></div></nav><div class="sidebar-bottom">● &nbsp;基于当前源码 · 中文文档</div></aside><div class="shell"><header class="topbar"><button class="menu-toggle" aria-label="打开导航" aria-controls="navigation" aria-expanded="false">☰</button><div class="breadcrumb"><a href="index.html">文档</a><span>/</span>开始使用</div><div class="top-actions"><a href="markdown/configuration.md">页面源码 ↗</a><button class="theme-toggle" aria-label="切换深色模式">◐</button></div></header><div class="reading-layout"><main id="main"><div class="page-heading "><div class="eyebrow">TUNMO / 开始使用</div><h1>配置与数据目录</h1><p class="lead">理解模型配置、用户资源和运行数据分别保存在哪里。</p></div><details class="mobile-toc"><summary>本页内容</summary><a href="#section-1">配置文件</a><a href="#section-2">配置损坏时的行为</a><a href="#section-3">用户资源与运行数据</a><a href="#section-4">客户端集成约定</a></details><section><h2 id="section-1">配置文件<a class="anchor" href="#section-1" aria-label="配置文件的链接">#</a></h2><p>Agent 固定使用当前用户主目录下的 <code>~/.tunmo/agent</code>，Windows 使用对应的用户主目录。</p><dl><dt>settings.json</dt><dd>Pi 设置、资源发现配置，以及 <code>tunmo.webAccess</code> 搜索配置。</dd><dt>auth.json</dt><dd>模型提供商凭据，遵循当前 Pi 版本支持的结构。</dd><dt>models.json</dt><dd>自定义模型定义，遵循当前 Pi 版本支持的结构。</dd></dl><p>首次启动会创建最小合法配置。配置初始化不会自动提供模型凭据；通过客户端的模型配置流程或匹配版本的 Pi 配置设置模型后再发送请求。</p></section><section><h2 id="section-2">配置损坏时的行为<a class="anchor" href="#section-2" aria-label="配置损坏时的行为的链接">#</a></h2><p>启动前先加锁检查 JSON 和 schema。损坏文件会重命名为 <code>&lt;name&gt;.bak.&lt;timestamp&gt;.&lt;pid&gt;</code>，随后写入最小合法配置。原内容保留，可人工检查并恢复有效字段。</p><p>配置预检按目录 0700、文件 0600 设置权限；Windows 的实际访问控制还取决于文件系统 ACL。配置修复通知在 Pi 就绪后通过原生通知送达客户端。</p></section><section><h2 id="section-3">用户资源与运行数据<a class="anchor" href="#section-3" aria-label="用户资源与运行数据的链接">#</a></h2><pre><code class="language-text">~/.tunmo/agent/
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="理解模型配置、用户资源和运行数据分别保存在哪里。">
+  <meta name="color-scheme" content="light dark">
+  <link rel="alternate" hreflang="zh-CN" href="configuration.html">
+  <link rel="alternate" hreflang="en" href="en/configuration.html">
+  <title>配置与数据目录 · Tunmo Agent 文档</title>
+  <link rel="stylesheet" href="assets/styles.css?v=48f5642436e5">
+  <script src="assets/search-index.js?v=adcfe906cb6b" defer></script>
+  <script src="assets/app.js?v=29a07a919544" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到正文</a>
+  <div class="scrim" hidden></div>
+  <aside class="sidebar" id="navigation" aria-label="文档导航">
+    <div class="sidebar-header">
+      <a class="brand" href="index.html" aria-label="Tunmo 文档首页"><span class="brand-logo" role="img" aria-label="Tunmo"></span></a>
+      <button class="menu-close icon-button" aria-label="关闭导航"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="edition">图墨 Agent 文档 <span>开发版</span></div>
+    <button class="search-trigger" aria-label="搜索文档"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><span>搜索文档</span><kbd>⌘ K</kbd></button>
+    <div class="sidebar-scroll"><nav aria-label="所有文档"><div class="nav-group"><p>开始使用</p><a href="index.html"><span>欢迎使用 Tunmo Agent</span></a><a href="quickstart.html"><span>安装与快速开始</span></a><a href="configuration.html" aria-current="page"><span>配置与数据目录</span><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div><div class="nav-group"><p>核心能力</p><a href="web-access.html"><span>联网搜索与网页读取</span></a><a href="goals.html"><span>目标模式 Goal</span></a><a href="skills.html"><span>Skills 与知识复用</span></a></div><div class="nav-group"><p>地理空间能力</p><a href="modules.html"><span>可选模块管理</span></a><a href="qgis.html"><span>QGIS 空间处理</span></a><a href="geopandas.html"><span>GeoPandas 矢量分析</span></a></div><div class="nav-group"><p>开发者指南</p><a href="rpc.html"><span>会话与 RPC 接入</span></a><a href="extensions.html"><span>扩展与 SDK</span></a><a href="runtimes.html"><span>Runtime 与执行生命周期</span></a></div><div class="nav-group"><p>参考与支持</p><a href="troubleshooting.html"><span>故障排查</span></a><a href="reference.html"><span>版本、范围与文档维护</span></a></div></nav></div>
+    <div class="sidebar-bottom"><span class="status-dot"></span>中文文档<span class="sidebar-tag">TUNMO AGENT</span></div>
+  </aside>
+  <div class="shell">
+    <header class="topbar">
+      <button class="menu-toggle icon-button" aria-label="打开导航" aria-controls="navigation" aria-expanded="false"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div class="breadcrumb"><a href="index.html">文档</a><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span title="开始使用">开始使用</span></div>
+      <div class="top-actions">
+        <nav class="language-selector" aria-label="文档语言"><span class="language-option" lang="zh-CN" aria-current="page">中文</span><a class="language-option language-switch" href="en/configuration.html" lang="en" hreflang="en" aria-label="切换到英文" title="切换到英文">EN</a></nav>
+        <div class="language-dropdown">
+          <button class="language-trigger icon-button" type="button" aria-label="切换语言" aria-expanded="false" aria-controls="language-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6m-7 0 6-6 2-3M2 5h12M7 2v3m15 17-5-11-5 11m2-4h6"/></svg><svg class="icon language-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+          <div class="language-menu" id="language-options" hidden>
+            <nav class="language-menu-options" aria-label="文档语言">
+              <span class="language-menu-current" lang="zh-CN" aria-current="page">简体中文</span>
+              <a class="language-menu-option language-switch" href="en/configuration.html" lang="en" hreflang="en" aria-label="切换到英文">English</a>
+            </nav>
+          </div>
+        </div>
+        <button class="search-trigger top-search icon-button" aria-label="搜索文档"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></button>
+        <div class="download-control">
+          <button class="download-trigger icon-button" type="button" aria-label="下载" aria-expanded="false" aria-controls="download-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg></button>
+          <div class="download-menu" id="download-options" hidden>
+            <div class="download-options">
+              <a class="download-option" href="markdown/configuration.md" download="configuration.md"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h6"/></svg><span>Markdown 文档</span></a>
+            </div>
+          </div>
+        </div>
+        <span class="action-divider" aria-hidden="true"></span>
+        <button class="theme-toggle icon-button" aria-label="切换深色模式"><svg class="icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg></button>
+        <button class="phone-tools-toggle icon-button" type="button" aria-label="打开更多选项" aria-expanded="false" aria-controls="phone-tools-panel"><svg class="icon tools-open-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h12M4 12h16M12 18h8"/></svg><svg class="icon tools-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        <div class="phone-tools-panel" id="phone-tools-panel" role="region" aria-label="阅读选项" hidden>
+          <div class="phone-language-control">
+            <button class="phone-language-trigger" type="button" aria-label="切换语言，当前：简体中文" aria-expanded="false" aria-controls="phone-language-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6m-7 0 6-6 2-3M2 5h12M7 2v3m15 17-5-11-5 11m2-4h6"/></svg><span lang="zh-CN">简体中文</span><svg class="icon language-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+            <div class="phone-language-menu" id="phone-language-options" hidden>
+              <nav class="phone-language-options" aria-label="文档语言">
+                <span class="language-menu-current" lang="zh-CN" aria-current="page">简体中文</span>
+                <a class="phone-language-option language-menu-option language-switch" href="en/configuration.html" lang="en" hreflang="en" aria-label="切换到英文">English</a>
+              </nav>
+            </div>
+          </div>
+          <div class="phone-appearance">
+            <span>外观</span>
+            <button class="theme-toggle phone-theme-toggle" type="button" role="switch" aria-label="深色模式" aria-checked="false"><span class="theme-thumb"><svg class="icon theme-light-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-dark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg></span></button>
+          </div>
+          <a class="phone-download" href="markdown/configuration.md" download="configuration.md"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg><span>Markdown 文档</span></a>
+        </div>
+      </div>
+    </header>
+    <div class="reading-layout">
+      <main id="main" tabindex="-1">
+        <div class="page-heading ">
+          <div class="heading-content">
+            <div class="eyebrow"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M3 4c4-1 6 0 9 2 3-2 5-3 9-2v15c-4-1-6 0-9 2-3-2-5-3-9-2Z"/></svg><span>开始使用</span></div>
+            <h1>配置与数据目录</h1>
+            <p class="lead">理解模型配置、用户资源和运行数据分别保存在哪里。</p>
+
+          </div>
+
+        </div>
+        <details class="mobile-toc"><summary><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>本页内容<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></summary><div><a href="#section-1">配置文件</a><a href="#section-2">配置损坏时的行为</a><a href="#section-3">用户资源与运行数据</a><a href="#section-4">客户端集成约定</a></div></details>
+        <section><h2 id="section-1">配置文件<a class="anchor" href="#section-1" aria-label="配置文件的链接">#</a></h2><p>Agent 固定使用当前用户主目录下的 <code>~/.tunmo/agent</code>，Windows 使用对应的用户主目录。</p><dl><dt>settings.json</dt><dd>Pi 设置、资源发现配置，以及 <code>tunmo.webAccess</code> 搜索配置。</dd><dt>auth.json</dt><dd>模型提供商凭据，遵循当前 Pi 版本支持的结构。</dd><dt>models.json</dt><dd>自定义模型定义，遵循当前 Pi 版本支持的结构。</dd></dl><p>首次启动会创建最小合法配置。配置初始化不会自动提供模型凭据；通过客户端的模型配置流程或匹配版本的 Pi 配置设置模型后再发送请求。</p></section>
+        <section><h2 id="section-2">配置损坏时的行为<a class="anchor" href="#section-2" aria-label="配置损坏时的行为的链接">#</a></h2><p>启动前先加锁检查 JSON 和 schema。损坏文件会重命名为 <code>&lt;name&gt;.bak.&lt;timestamp&gt;.&lt;pid&gt;</code>，随后写入最小合法配置。原内容保留，可人工检查并恢复有效字段。</p><p>配置预检按目录 0700、文件 0600 设置权限；Windows 的实际访问控制还取决于文件系统 ACL。配置修复通知在 Pi 就绪后通过原生通知送达客户端。</p></section>
+        <section><h2 id="section-3">用户资源与运行数据<a class="anchor" href="#section-3" aria-label="用户资源与运行数据的链接">#</a></h2><pre><code class="language-text">~/.tunmo/agent/
 ├── settings.json / auth.json / models.json
 ├── sessions/                 # 会话
 ├── skills/                   # 用户 Skills
@@ -9,4 +95,20 @@
 ├── execution-policy.json     # 可选的执行策略
 ├── verification-cache/       # 内容校验缓存
 ├── extension-state/          # 索引、事务、租约
-└── execution-artifacts/      # 持久产物</code></pre><p>项目工作区、只读安装目录和用户数据分开管理。不要直接修改共享索引或删除租约；使用管理 CLI 完成启停、卸载和回收。</p></section><section><h2 id="section-4">客户端集成约定<a class="anchor" href="#section-4" aria-label="客户端集成约定的链接">#</a></h2><aside class="note"><strong>使用提示</strong><p>管理 CLI 支持 <code>--agent-dir</code>，但当前 Agent 会话启动器没有对应的可配置目录参数。仅把管理 CLI 指向 Electron userData 不会改变 Agent 的数据位置。管理 CLI 与 Agent 必须指向同一用户的数据目录、相符发行资源和同一组安装状态。</p></aside><p>有效的 extensions、skills、prompts、themes 和 packages 配置继续交给 Pi 自动发现。切换模型的落盘语义沿用 Pi；多进程同时修改默认模型时，最后一次写入生效。</p></section><details class="sources"><summary>内容依据 · 对应仓库文件</summary><ul><li><code>src/config-preflight.ts</code></li><li><code>src/config-validation.ts</code></li><li><code>src/launcher.ts</code></li><li><code>src/extension-host/management/store.ts</code></li><li><code>src/extension-host/execution/policy.ts</code></li></ul><p>路径相对于仓库根目录；以当前检出源码为准。</p></details><nav class="pagination" aria-label="上一篇和下一篇"><a href="quickstart.html"><small>上一篇</small>安装与快速开始 </a><a href="web-access.html"><small>下一篇</small>联网搜索与网页读取 →</a></nav><footer><span>Tunmo · 图墨 Agent</span><span>源码核对 2026-09-20 · 历史验收见各自记录</span></footer></main><aside class="toc" aria-label="本页目录"><p>本页内容</p><a href="#section-1">配置文件</a><a href="#section-2">配置损坏时的行为</a><a href="#section-3">用户资源与运行数据</a><a href="#section-4">客户端集成约定</a><div class="toc-bottom">让工具理解上下文。<br>让工作有迹可循。</div></aside></div></div><dialog class="search-dialog" aria-label="搜索文档"><div class="search-box"><span>⌕</span><input type="search" placeholder="搜索功能、工具名称或错误…" aria-label="搜索文档" autocomplete="off"><button class="close-search" aria-label="关闭搜索">Esc</button></div><div class="search-results" aria-live="polite"></div><div class="search-help">全文本地搜索 · Enter 打开首条结果 · Esc 关闭</div></dialog><div class="toast" role="status"></div></body></html>
+└── execution-artifacts/      # 持久产物</code></pre><p>项目工作区、只读安装目录和用户数据分开管理。不要直接修改共享索引或删除租约；使用管理 CLI 完成启停、卸载和回收。</p></section>
+        <section><h2 id="section-4">客户端集成约定<a class="anchor" href="#section-4" aria-label="客户端集成约定的链接">#</a></h2><aside class="note"><strong>使用提示</strong><p>管理 CLI 支持 <code>--agent-dir</code>，但当前 Agent 会话启动器没有对应的可配置目录参数。仅把管理 CLI 指向 Electron userData 不会改变 Agent 的数据位置。管理 CLI 与 Agent 必须指向同一用户的数据目录、相符发行资源和同一组安装状态。</p></aside><p>有效的 extensions、skills、prompts、themes 和 packages 配置继续交给 Pi 自动发现。切换模型的落盘语义沿用 Pi；多进程同时修改默认模型时，最后一次写入生效。</p></section>
+        <details class="sources"><summary><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h6"/></svg>内容依据 · 对应仓库文件<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></summary><ul><li><code>src/config-preflight.ts</code></li><li><code>src/config-validation.ts</code></li><li><code>src/launcher.ts</code></li><li><code>src/extension-host/management/store.ts</code></li><li><code>src/extension-host/execution/policy.ts</code></li></ul><p>路径相对于仓库根目录；以当前检出源码为准。</p></details>
+        <nav class="pagination" aria-label="上一篇和下一篇"><a href="quickstart.html"><small>上一篇</small><span><svg class="icon reverse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>安装与快速开始</span></a><a href="web-access.html"><small>下一篇</small><span>联网搜索与网页读取<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></a></nav>
+        <footer><span>Tunmo <span class="footer-dot">/</span> 图墨 Agent</span><span>源码核对 2026-09-20 · 历史验收见各自记录</span></footer>
+      </main>
+      <aside class="toc" aria-label="本页目录"><p>本页内容</p><nav><a href="#section-1">配置文件</a><a href="#section-2">配置损坏时的行为</a><a href="#section-3">用户资源与运行数据</a><a href="#section-4">客户端集成约定</a></nav><div class="toc-bottom">让工具理解上下文。<br>让工作有迹可循。</div><a class="back-to-top" href="#main">返回顶部 ↑</a></aside>
+    </div>
+  </div>
+  <dialog class="search-dialog" aria-label="搜索文档">
+    <div class="search-box"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><input type="search" placeholder="搜索功能、工具名称或错误…" aria-label="搜索文档" autocomplete="off"><button class="close-search" aria-label="关闭搜索">Esc</button></div>
+    <div class="search-results" aria-live="polite"></div>
+    <div class="search-help"><span>本地全文搜索</span><span>↑ ↓ 选择 · Enter 打开 · Esc 关闭</span></div>
+  </dialog>
+  <div class="toast" role="status"></div>
+</body>
+</html>

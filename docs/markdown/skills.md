@@ -1,7 +1,5 @@
 # Skills 与知识复用
 
-> 文档版本：v0.1.0
-
 把可重复的工作流程组织成可发现、可维护的 Skill Directory。
 
 ## Skill 的用途

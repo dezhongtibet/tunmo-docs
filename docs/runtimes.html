@@ -1,2 +1,105 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="以内容身份共享完整环境，让每个会话绑定可追踪的运行版本。"><title>Runtime 与执行生命周期 · Tunmo Agent 文档</title><link rel="stylesheet" href="assets/styles.css"><script src="assets/search-index.js" defer></script><script src="assets/app.js" defer></script></head><body><a class="skip" href="#main">跳到正文</a><div class="scrim" hidden></div><aside class="sidebar" id="navigation" aria-label="文档导航"><a class="brand" href="index.html" aria-label="Tunmo 文档首页"><span class="brand-logo" role="img" aria-label="Tunmo"></span></a><div class="edition">AGENT DOCUMENTATION <span>v0.1.0</span></div><button class="search-trigger"><span>⌕ &nbsp;搜索文档</span><kbd>⌘ K</kbd></button><nav><div class="nav-group"><p>开始使用</p><a href="index.html">欢迎使用 Tunmo Agent</a><a href="quickstart.html">安装与快速开始</a><a href="configuration.html">配置与数据目录</a></div><div class="nav-group"><p>核心能力</p><a href="web-access.html">联网搜索与网页读取</a><a href="goals.html">目标模式 Goal</a><a href="skills.html">Skills 与知识复用</a></div><div class="nav-group"><p>地理空间能力</p><a href="modules.html">可选模块管理</a><a href="qgis.html">QGIS 空间处理</a><a href="geopandas.html">GeoPandas 矢量分析</a></div><div class="nav-group"><p>开发者指南</p><a href="rpc.html">会话与 RPC 接入</a><a href="extensions.html">扩展与 SDK</a><a href="runtimes.html" aria-current="page">Runtime 与执行生命周期</a></div><div class="nav-group"><p>参考与支持</p><a href="troubleshooting.html">故障排查</a><a href="reference.html">版本、范围与文档维护</a></div></nav><div class="sidebar-bottom">● &nbsp;基于当前源码 · 中文文档</div></aside><div class="shell"><header class="topbar"><button class="menu-toggle" aria-label="打开导航" aria-controls="navigation" aria-expanded="false">☰</button><div class="breadcrumb"><a href="index.html">文档</a><span>/</span>开发者指南</div><div class="top-actions"><a href="markdown/runtimes.md">页面源码 ↗</a><button class="theme-toggle" aria-label="切换深色模式">◐</button></div></header><div class="reading-layout"><main id="main"><div class="page-heading "><div class="eyebrow">TUNMO / 开发者指南</div><h1>Runtime 与执行生命周期</h1><p class="lead">以内容身份共享完整环境，让每个会话绑定可追踪的运行版本。</p></div><details class="mobile-toc"><summary>本页内容</summary><a href="#section-1">Runtime 是什么</a><a href="#section-2">会话快照与租约</a><a href="#section-3">离线导入</a><a href="#section-4">启动与清理</a><a href="#section-5">云端执行边界</a></details><section><h2 id="section-1">Runtime 是什么<a class="anchor" href="#section-1" aria-label="Runtime 是什么的链接">#</a></h2><p>Runtime 是经过校验的解释器、库环境和入口集合。多个扩展可复用同一内容；不同环境摘要或不兼容版本分别保留，不通过合并 site-packages 实现共享。</p><p>binding: host 校验实际 Agent Node，binding: artifact 选择磁盘制品。匹配包含版本、系统、架构、ABI、最低系统版本、构建身份与摘要。</p></section><section><h2 id="section-2">会话快照与租约<a class="anchor" href="#section-2" aria-label="会话快照与租约的链接">#</a></h2><p>会话启动时锁定依赖并建立租约。升级后旧会话继续持有旧绑定；新会话选择新版本。垃圾回收复核安装、回滚与活跃租约，只有没有引用的资源才可删除。</p><p>停用可选模块的权限撤销独立于文件保留。保留旧 Runtime 不表示旧会话仍可执行已停用的模块。</p></section><section><h2 id="section-3">离线导入<a class="anchor" href="#section-3" aria-label="离线导入的链接">#</a></h2><pre><code class="language-bash">node bin/tunmo-extension.mjs validate runtime /absolute/prepared/runtime
-node bin/tunmo-extension.mjs import-runtime /absolute/prepared/runtime</code></pre><p>输入必须是已准备并封装摘要的 Runtime。管理入口不执行 npm/pip 安装脚本。大型目录导入限制为 16 GiB / 200,000 文件；v1 .tunmo 格式保持 512 MiB 解包、256 MiB 压缩上限，不能直接用于大型 GIS 环境。</p></section><section><h2 id="section-4">启动与清理<a class="anchor" href="#section-4" aria-label="启动与清理的链接">#</a></h2><p>Runtime 可通过 launch 声明固定参数、包内脚本和环境。仅拿到 entrypoints 的程序路径，不能替代包含 launch 的完整启动计划。</p><p>子进程调用有独立任务目录、监督器和执行租约。Unix 使用进程组，Windows 使用 Job Object。先结束进程树，再清理目录与释放占用；超时不等于清理已经结束。</p><p>JSONL Worker 协议与外部 Pi RPC 隔离。Worker 必须返回同一请求 ID 的状态、进度和恰好一个终态，第三方库诊断写 stderr。</p></section><section><h2 id="section-5">云端执行边界<a class="anchor" href="#section-5" aria-label="云端执行边界的链接">#</a></h2><p>当前仅提供显式策略启用的 mock 后端，执行仍发生在本机。在 <code>execution-policy.json</code> 中按工具显式指定 <code>executor: cloud</code>、<code>backend: mock</code> 与 <code>allowDataTransfer</code>；本地失败不会自动上传或转移云端。</p><p>远端结果未知时保留恢复信息，不盲目重提交有副作用任务。这些适配接口和模拟测试不代表生产云服务已经上线。</p></section><details class="sources"><summary>内容依据 · 对应仓库文件</summary><ul><li><code>sdk/README.md</code></li><li><code>src/extension-host/runtime/resolver.ts</code></li><li><code>src/extension-host/management/archive.ts</code></li><li><code>src/extension-host/execution/contracts.ts</code></li><li><code>src/extension-host/execution/policy.ts</code></li><li><code>docs/runtime-declarative-launch.md</code></li><li><code>docs/runtime-channel.md</code></li></ul><p>路径相对于仓库根目录；以当前检出源码为准。</p></details><nav class="pagination" aria-label="上一篇和下一篇"><a href="extensions.html"><small>上一篇</small>扩展与 SDK </a><a href="troubleshooting.html"><small>下一篇</small>故障排查 →</a></nav><footer><span>Tunmo · 图墨 Agent</span><span>源码核对 2026-09-20 · 历史验收见各自记录</span></footer></main><aside class="toc" aria-label="本页目录"><p>本页内容</p><a href="#section-1">Runtime 是什么</a><a href="#section-2">会话快照与租约</a><a href="#section-3">离线导入</a><a href="#section-4">启动与清理</a><a href="#section-5">云端执行边界</a><div class="toc-bottom">让工具理解上下文。<br>让工作有迹可循。</div></aside></div></div><dialog class="search-dialog" aria-label="搜索文档"><div class="search-box"><span>⌕</span><input type="search" placeholder="搜索功能、工具名称或错误…" aria-label="搜索文档" autocomplete="off"><button class="close-search" aria-label="关闭搜索">Esc</button></div><div class="search-results" aria-live="polite"></div><div class="search-help">全文本地搜索 · Enter 打开首条结果 · Esc 关闭</div></dialog><div class="toast" role="status"></div></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="以内容身份共享完整环境，让每个会话绑定可追踪的运行版本。">
+  <meta name="color-scheme" content="light dark">
+  <link rel="alternate" hreflang="zh-CN" href="runtimes.html">
+  <link rel="alternate" hreflang="en" href="en/runtimes.html">
+  <title>Runtime 与执行生命周期 · Tunmo Agent 文档</title>
+  <link rel="stylesheet" href="assets/styles.css?v=48f5642436e5">
+  <script src="assets/search-index.js?v=adcfe906cb6b" defer></script>
+  <script src="assets/app.js?v=29a07a919544" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到正文</a>
+  <div class="scrim" hidden></div>
+  <aside class="sidebar" id="navigation" aria-label="文档导航">
+    <div class="sidebar-header">
+      <a class="brand" href="index.html" aria-label="Tunmo 文档首页"><span class="brand-logo" role="img" aria-label="Tunmo"></span></a>
+      <button class="menu-close icon-button" aria-label="关闭导航"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="edition">图墨 Agent 文档 <span>开发版</span></div>
+    <button class="search-trigger" aria-label="搜索文档"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><span>搜索文档</span><kbd>⌘ K</kbd></button>
+    <div class="sidebar-scroll"><nav aria-label="所有文档"><div class="nav-group"><p>开始使用</p><a href="index.html"><span>欢迎使用 Tunmo Agent</span></a><a href="quickstart.html"><span>安装与快速开始</span></a><a href="configuration.html"><span>配置与数据目录</span></a></div><div class="nav-group"><p>核心能力</p><a href="web-access.html"><span>联网搜索与网页读取</span></a><a href="goals.html"><span>目标模式 Goal</span></a><a href="skills.html"><span>Skills 与知识复用</span></a></div><div class="nav-group"><p>地理空间能力</p><a href="modules.html"><span>可选模块管理</span></a><a href="qgis.html"><span>QGIS 空间处理</span></a><a href="geopandas.html"><span>GeoPandas 矢量分析</span></a></div><div class="nav-group"><p>开发者指南</p><a href="rpc.html"><span>会话与 RPC 接入</span></a><a href="extensions.html"><span>扩展与 SDK</span></a><a href="runtimes.html" aria-current="page"><span>Runtime 与执行生命周期</span><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div><div class="nav-group"><p>参考与支持</p><a href="troubleshooting.html"><span>故障排查</span></a><a href="reference.html"><span>版本、范围与文档维护</span></a></div></nav></div>
+    <div class="sidebar-bottom"><span class="status-dot"></span>中文文档<span class="sidebar-tag">TUNMO AGENT</span></div>
+  </aside>
+  <div class="shell">
+    <header class="topbar">
+      <button class="menu-toggle icon-button" aria-label="打开导航" aria-controls="navigation" aria-expanded="false"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div class="breadcrumb"><a href="index.html">文档</a><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span title="开发者指南">开发者指南</span></div>
+      <div class="top-actions">
+        <nav class="language-selector" aria-label="文档语言"><span class="language-option" lang="zh-CN" aria-current="page">中文</span><a class="language-option language-switch" href="en/runtimes.html" lang="en" hreflang="en" aria-label="切换到英文" title="切换到英文">EN</a></nav>
+        <div class="language-dropdown">
+          <button class="language-trigger icon-button" type="button" aria-label="切换语言" aria-expanded="false" aria-controls="language-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6m-7 0 6-6 2-3M2 5h12M7 2v3m15 17-5-11-5 11m2-4h6"/></svg><svg class="icon language-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+          <div class="language-menu" id="language-options" hidden>
+            <nav class="language-menu-options" aria-label="文档语言">
+              <span class="language-menu-current" lang="zh-CN" aria-current="page">简体中文</span>
+              <a class="language-menu-option language-switch" href="en/runtimes.html" lang="en" hreflang="en" aria-label="切换到英文">English</a>
+            </nav>
+          </div>
+        </div>
+        <button class="search-trigger top-search icon-button" aria-label="搜索文档"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></button>
+        <div class="download-control">
+          <button class="download-trigger icon-button" type="button" aria-label="下载" aria-expanded="false" aria-controls="download-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg></button>
+          <div class="download-menu" id="download-options" hidden>
+            <div class="download-options">
+              <a class="download-option" href="markdown/runtimes.md" download="runtimes.md"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h6"/></svg><span>Markdown 文档</span></a>
+            </div>
+          </div>
+        </div>
+        <span class="action-divider" aria-hidden="true"></span>
+        <button class="theme-toggle icon-button" aria-label="切换深色模式"><svg class="icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg></button>
+        <button class="phone-tools-toggle icon-button" type="button" aria-label="打开更多选项" aria-expanded="false" aria-controls="phone-tools-panel"><svg class="icon tools-open-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h12M4 12h16M12 18h8"/></svg><svg class="icon tools-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        <div class="phone-tools-panel" id="phone-tools-panel" role="region" aria-label="阅读选项" hidden>
+          <div class="phone-language-control">
+            <button class="phone-language-trigger" type="button" aria-label="切换语言，当前：简体中文" aria-expanded="false" aria-controls="phone-language-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6m-7 0 6-6 2-3M2 5h12M7 2v3m15 17-5-11-5 11m2-4h6"/></svg><span lang="zh-CN">简体中文</span><svg class="icon language-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+            <div class="phone-language-menu" id="phone-language-options" hidden>
+              <nav class="phone-language-options" aria-label="文档语言">
+                <span class="language-menu-current" lang="zh-CN" aria-current="page">简体中文</span>
+                <a class="phone-language-option language-menu-option language-switch" href="en/runtimes.html" lang="en" hreflang="en" aria-label="切换到英文">English</a>
+              </nav>
+            </div>
+          </div>
+          <div class="phone-appearance">
+            <span>外观</span>
+            <button class="theme-toggle phone-theme-toggle" type="button" role="switch" aria-label="深色模式" aria-checked="false"><span class="theme-thumb"><svg class="icon theme-light-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-dark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg></span></button>
+          </div>
+          <a class="phone-download" href="markdown/runtimes.md" download="runtimes.md"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg><span>Markdown 文档</span></a>
+        </div>
+      </div>
+    </header>
+    <div class="reading-layout">
+      <main id="main" tabindex="-1">
+        <div class="page-heading ">
+          <div class="heading-content">
+            <div class="eyebrow"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M3 4c4-1 6 0 9 2 3-2 5-3 9-2v15c-4-1-6 0-9 2-3-2-5-3-9-2Z"/></svg><span>开发者指南</span></div>
+            <h1>Runtime 与执行生命周期</h1>
+            <p class="lead">以内容身份共享完整环境，让每个会话绑定可追踪的运行版本。</p>
+
+          </div>
+
+        </div>
+        <details class="mobile-toc"><summary><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>本页内容<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></summary><div><a href="#section-1">Runtime 是什么</a><a href="#section-2">会话快照与租约</a><a href="#section-3">离线导入</a><a href="#section-4">启动与清理</a><a href="#section-5">云端执行边界</a></div></details>
+        <section><h2 id="section-1">Runtime 是什么<a class="anchor" href="#section-1" aria-label="Runtime 是什么的链接">#</a></h2><p>Runtime 是经过校验的解释器、库环境和入口集合。多个扩展可复用同一内容；不同环境摘要或不兼容版本分别保留，不通过合并 site-packages 实现共享。</p><p>binding: host 校验实际 Agent Node，binding: artifact 选择磁盘制品。匹配包含版本、系统、架构、ABI、最低系统版本、构建身份与摘要。</p></section>
+        <section><h2 id="section-2">会话快照与租约<a class="anchor" href="#section-2" aria-label="会话快照与租约的链接">#</a></h2><p>会话启动时锁定依赖并建立租约。升级后旧会话继续持有旧绑定；新会话选择新版本。垃圾回收复核安装、回滚与活跃租约，只有没有引用的资源才可删除。</p><p>停用可选模块的权限撤销独立于文件保留。保留旧 Runtime 不表示旧会话仍可执行已停用的模块。</p></section>
+        <section><h2 id="section-3">离线导入<a class="anchor" href="#section-3" aria-label="离线导入的链接">#</a></h2><pre><code class="language-bash">node bin/tunmo-extension.mjs validate runtime /absolute/prepared/runtime
+node bin/tunmo-extension.mjs import-runtime /absolute/prepared/runtime</code></pre><p>输入必须是已准备并封装摘要的 Runtime。管理入口不执行 npm/pip 安装脚本。大型目录导入限制为 16 GiB / 200,000 文件；v1 .tunmo 格式保持 512 MiB 解包、256 MiB 压缩上限，不能直接用于大型 GIS 环境。</p></section>
+        <section><h2 id="section-4">启动与清理<a class="anchor" href="#section-4" aria-label="启动与清理的链接">#</a></h2><p>Runtime 可通过 launch 声明固定参数、包内脚本和环境。仅拿到 entrypoints 的程序路径，不能替代包含 launch 的完整启动计划。</p><p>子进程调用有独立任务目录、监督器和执行租约。Unix 使用进程组，Windows 使用 Job Object。先结束进程树，再清理目录与释放占用；超时不等于清理已经结束。</p><p>JSONL Worker 协议与外部 Pi RPC 隔离。Worker 必须返回同一请求 ID 的状态、进度和恰好一个终态，第三方库诊断写 stderr。</p></section>
+        <section><h2 id="section-5">云端执行边界<a class="anchor" href="#section-5" aria-label="云端执行边界的链接">#</a></h2><p>当前仅提供显式策略启用的 mock 后端，执行仍发生在本机。在 <code>execution-policy.json</code> 中按工具显式指定 <code>executor: cloud</code>、<code>backend: mock</code> 与 <code>allowDataTransfer</code>；本地失败不会自动上传或转移云端。</p><p>远端结果未知时保留恢复信息，不盲目重提交有副作用任务。这些适配接口和模拟测试不代表生产云服务已经上线。</p></section>
+        <details class="sources"><summary><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h6"/></svg>内容依据 · 对应仓库文件<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></summary><ul><li><code>sdk/README.md</code></li><li><code>src/extension-host/runtime/resolver.ts</code></li><li><code>src/extension-host/management/archive.ts</code></li><li><code>src/extension-host/execution/contracts.ts</code></li><li><code>src/extension-host/execution/policy.ts</code></li><li><code>docs/runtime-declarative-launch.md</code></li><li><code>docs/runtime-channel.md</code></li></ul><p>路径相对于仓库根目录；以当前检出源码为准。</p></details>
+        <nav class="pagination" aria-label="上一篇和下一篇"><a href="extensions.html"><small>上一篇</small><span><svg class="icon reverse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>扩展与 SDK</span></a><a href="troubleshooting.html"><small>下一篇</small><span>故障排查<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></a></nav>
+        <footer><span>Tunmo <span class="footer-dot">/</span> 图墨 Agent</span><span>源码核对 2026-09-20 · 历史验收见各自记录</span></footer>
+      </main>
+      <aside class="toc" aria-label="本页目录"><p>本页内容</p><nav><a href="#section-1">Runtime 是什么</a><a href="#section-2">会话快照与租约</a><a href="#section-3">离线导入</a><a href="#section-4">启动与清理</a><a href="#section-5">云端执行边界</a></nav><div class="toc-bottom">让工具理解上下文。<br>让工作有迹可循。</div><a class="back-to-top" href="#main">返回顶部 ↑</a></aside>
+    </div>
+  </div>
+  <dialog class="search-dialog" aria-label="搜索文档">
+    <div class="search-box"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><input type="search" placeholder="搜索功能、工具名称或错误…" aria-label="搜索文档" autocomplete="off"><button class="close-search" aria-label="关闭搜索">Esc</button></div>
+    <div class="search-results" aria-live="polite"></div>
+    <div class="search-help"><span>本地全文搜索</span><span>↑ ↓ 选择 · Enter 打开 · Esc 关闭</span></div>
+  </dialog>
+  <div class="toast" role="status"></div>
+</body>
+</html>

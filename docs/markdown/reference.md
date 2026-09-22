@@ -1,7 +1,5 @@
 # 版本、范围与文档维护
 
-> 文档版本：v0.1.0
-
 以当前检出源码为准，区分已实现能力、发行配置和历史验证记录。
 
 ## 文档基线
@@ -18,7 +16,7 @@
 
 ## 更新文档
 
-<p>所有站点文件都位于 docs/public，可直接打开 index.html 或通过任意静态 HTTP 服务浏览，无外部字体、CDN 或运行时依赖。</p><p>content.json 是文档内容源。修改后运行：</p><pre><code class="language-bash">node docs/public/build.mjs</code></pre><p>生成独立 HTML 页面、全文搜索索引和 Markdown 副本。assets/styles.css 与 assets/app.js 维护样式和交互。维护说明见同目录 README.md。涉及工具、配置或平台变化时同步核对对应源码，避免只沿用旧交接记录。</p>
+<p>所有站点文件都位于 docs/public，可直接打开 index.html 或通过任意静态 HTTP 服务浏览，无外部字体、CDN 或运行时依赖。</p><p>content.json 与 content.en.json 分别维护中文和英文内容。两者的页面 ID、章节 ID、顺序和源码依据必须一一对应。修改后运行：</p><pre><code class="language-bash">node docs/public/build.mjs</code></pre><p>生成中英文各 14 个独立 HTML 页面，以及各自的全文搜索索引和 Markdown 副本。中文位于站点根目录，英文位于 en/；顶栏语言入口可切换当前页面，并保留章节锚点。assets/styles.css 与 assets/app.js 维护样式和交互。维护说明见同目录 README.md。涉及工具、配置或平台变化时同步核对对应源码，避免只沿用旧交接记录。</p>
 
 ## 内容依据
 

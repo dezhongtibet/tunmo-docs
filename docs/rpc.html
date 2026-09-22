@@ -1,4 +1,88 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="客户端通过 Pi 原生 JSONL 协议与 Agent 通信，管理操作使用独立 CLI。"><title>会话与 RPC 接入 · Tunmo Agent 文档</title><link rel="stylesheet" href="assets/styles.css"><script src="assets/search-index.js" defer></script><script src="assets/app.js" defer></script></head><body><a class="skip" href="#main">跳到正文</a><div class="scrim" hidden></div><aside class="sidebar" id="navigation" aria-label="文档导航"><a class="brand" href="index.html" aria-label="Tunmo 文档首页"><span class="brand-logo" role="img" aria-label="Tunmo"></span></a><div class="edition">AGENT DOCUMENTATION <span>v0.1.0</span></div><button class="search-trigger"><span>⌕ &nbsp;搜索文档</span><kbd>⌘ K</kbd></button><nav><div class="nav-group"><p>开始使用</p><a href="index.html">欢迎使用 Tunmo Agent</a><a href="quickstart.html">安装与快速开始</a><a href="configuration.html">配置与数据目录</a></div><div class="nav-group"><p>核心能力</p><a href="web-access.html">联网搜索与网页读取</a><a href="goals.html">目标模式 Goal</a><a href="skills.html">Skills 与知识复用</a></div><div class="nav-group"><p>地理空间能力</p><a href="modules.html">可选模块管理</a><a href="qgis.html">QGIS 空间处理</a><a href="geopandas.html">GeoPandas 矢量分析</a></div><div class="nav-group"><p>开发者指南</p><a href="rpc.html" aria-current="page">会话与 RPC 接入</a><a href="extensions.html">扩展与 SDK</a><a href="runtimes.html">Runtime 与执行生命周期</a></div><div class="nav-group"><p>参考与支持</p><a href="troubleshooting.html">故障排查</a><a href="reference.html">版本、范围与文档维护</a></div></nav><div class="sidebar-bottom">● &nbsp;基于当前源码 · 中文文档</div></aside><div class="shell"><header class="topbar"><button class="menu-toggle" aria-label="打开导航" aria-controls="navigation" aria-expanded="false">☰</button><div class="breadcrumb"><a href="index.html">文档</a><span>/</span>开发者指南</div><div class="top-actions"><a href="markdown/rpc.md">页面源码 ↗</a><button class="theme-toggle" aria-label="切换深色模式">◐</button></div></header><div class="reading-layout"><main id="main"><div class="page-heading "><div class="eyebrow">TUNMO / 开发者指南</div><h1>会话与 RPC 接入</h1><p class="lead">客户端通过 Pi 原生 JSONL 协议与 Agent 通信，管理操作使用独立 CLI。</p></div><details class="mobile-toc"><summary>本页内容</summary><a href="#section-1">进程与通道</a><a href="#section-2">常用消息</a><a href="#section-3">不要混用管理协议</a><a href="#section-4">退出和错误</a></details><section><h2 id="section-1">进程与通道<a class="anchor" href="#section-1" aria-label="进程与通道的链接">#</a></h2><p>一个客户端任务绑定一个 Agent 进程 / Pi Session。使用 spawn 或 execFile 的参数数组传递路径，不拼接 shell 命令。</p><pre><code class="language-javascript">import { spawn } from &#x27;node:child_process&#x27;;
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="客户端通过 Pi 原生 JSONL 协议与 Agent 通信，管理操作使用独立 CLI。">
+  <meta name="color-scheme" content="light dark">
+  <link rel="alternate" hreflang="zh-CN" href="rpc.html">
+  <link rel="alternate" hreflang="en" href="en/rpc.html">
+  <title>会话与 RPC 接入 · Tunmo Agent 文档</title>
+  <link rel="stylesheet" href="assets/styles.css?v=48f5642436e5">
+  <script src="assets/search-index.js?v=adcfe906cb6b" defer></script>
+  <script src="assets/app.js?v=29a07a919544" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到正文</a>
+  <div class="scrim" hidden></div>
+  <aside class="sidebar" id="navigation" aria-label="文档导航">
+    <div class="sidebar-header">
+      <a class="brand" href="index.html" aria-label="Tunmo 文档首页"><span class="brand-logo" role="img" aria-label="Tunmo"></span></a>
+      <button class="menu-close icon-button" aria-label="关闭导航"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="edition">图墨 Agent 文档 <span>开发版</span></div>
+    <button class="search-trigger" aria-label="搜索文档"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><span>搜索文档</span><kbd>⌘ K</kbd></button>
+    <div class="sidebar-scroll"><nav aria-label="所有文档"><div class="nav-group"><p>开始使用</p><a href="index.html"><span>欢迎使用 Tunmo Agent</span></a><a href="quickstart.html"><span>安装与快速开始</span></a><a href="configuration.html"><span>配置与数据目录</span></a></div><div class="nav-group"><p>核心能力</p><a href="web-access.html"><span>联网搜索与网页读取</span></a><a href="goals.html"><span>目标模式 Goal</span></a><a href="skills.html"><span>Skills 与知识复用</span></a></div><div class="nav-group"><p>地理空间能力</p><a href="modules.html"><span>可选模块管理</span></a><a href="qgis.html"><span>QGIS 空间处理</span></a><a href="geopandas.html"><span>GeoPandas 矢量分析</span></a></div><div class="nav-group"><p>开发者指南</p><a href="rpc.html" aria-current="page"><span>会话与 RPC 接入</span><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="extensions.html"><span>扩展与 SDK</span></a><a href="runtimes.html"><span>Runtime 与执行生命周期</span></a></div><div class="nav-group"><p>参考与支持</p><a href="troubleshooting.html"><span>故障排查</span></a><a href="reference.html"><span>版本、范围与文档维护</span></a></div></nav></div>
+    <div class="sidebar-bottom"><span class="status-dot"></span>中文文档<span class="sidebar-tag">TUNMO AGENT</span></div>
+  </aside>
+  <div class="shell">
+    <header class="topbar">
+      <button class="menu-toggle icon-button" aria-label="打开导航" aria-controls="navigation" aria-expanded="false"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div class="breadcrumb"><a href="index.html">文档</a><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span title="开发者指南">开发者指南</span></div>
+      <div class="top-actions">
+        <nav class="language-selector" aria-label="文档语言"><span class="language-option" lang="zh-CN" aria-current="page">中文</span><a class="language-option language-switch" href="en/rpc.html" lang="en" hreflang="en" aria-label="切换到英文" title="切换到英文">EN</a></nav>
+        <div class="language-dropdown">
+          <button class="language-trigger icon-button" type="button" aria-label="切换语言" aria-expanded="false" aria-controls="language-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6m-7 0 6-6 2-3M2 5h12M7 2v3m15 17-5-11-5 11m2-4h6"/></svg><svg class="icon language-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+          <div class="language-menu" id="language-options" hidden>
+            <nav class="language-menu-options" aria-label="文档语言">
+              <span class="language-menu-current" lang="zh-CN" aria-current="page">简体中文</span>
+              <a class="language-menu-option language-switch" href="en/rpc.html" lang="en" hreflang="en" aria-label="切换到英文">English</a>
+            </nav>
+          </div>
+        </div>
+        <button class="search-trigger top-search icon-button" aria-label="搜索文档"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></button>
+        <div class="download-control">
+          <button class="download-trigger icon-button" type="button" aria-label="下载" aria-expanded="false" aria-controls="download-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg></button>
+          <div class="download-menu" id="download-options" hidden>
+            <div class="download-options">
+              <a class="download-option" href="markdown/rpc.md" download="rpc.md"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h6"/></svg><span>Markdown 文档</span></a>
+            </div>
+          </div>
+        </div>
+        <span class="action-divider" aria-hidden="true"></span>
+        <button class="theme-toggle icon-button" aria-label="切换深色模式"><svg class="icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg></button>
+        <button class="phone-tools-toggle icon-button" type="button" aria-label="打开更多选项" aria-expanded="false" aria-controls="phone-tools-panel"><svg class="icon tools-open-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h12M4 12h16M12 18h8"/></svg><svg class="icon tools-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        <div class="phone-tools-panel" id="phone-tools-panel" role="region" aria-label="阅读选项" hidden>
+          <div class="phone-language-control">
+            <button class="phone-language-trigger" type="button" aria-label="切换语言，当前：简体中文" aria-expanded="false" aria-controls="phone-language-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6m-7 0 6-6 2-3M2 5h12M7 2v3m15 17-5-11-5 11m2-4h6"/></svg><span lang="zh-CN">简体中文</span><svg class="icon language-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+            <div class="phone-language-menu" id="phone-language-options" hidden>
+              <nav class="phone-language-options" aria-label="文档语言">
+                <span class="language-menu-current" lang="zh-CN" aria-current="page">简体中文</span>
+                <a class="phone-language-option language-menu-option language-switch" href="en/rpc.html" lang="en" hreflang="en" aria-label="切换到英文">English</a>
+              </nav>
+            </div>
+          </div>
+          <div class="phone-appearance">
+            <span>外观</span>
+            <button class="theme-toggle phone-theme-toggle" type="button" role="switch" aria-label="深色模式" aria-checked="false"><span class="theme-thumb"><svg class="icon theme-light-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-dark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg></span></button>
+          </div>
+          <a class="phone-download" href="markdown/rpc.md" download="rpc.md"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg><span>Markdown 文档</span></a>
+        </div>
+      </div>
+    </header>
+    <div class="reading-layout">
+      <main id="main" tabindex="-1">
+        <div class="page-heading ">
+          <div class="heading-content">
+            <div class="eyebrow"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M3 4c4-1 6 0 9 2 3-2 5-3 9-2v15c-4-1-6 0-9 2-3-2-5-3-9-2Z"/></svg><span>开发者指南</span></div>
+            <h1>会话与 RPC 接入</h1>
+            <p class="lead">客户端通过 Pi 原生 JSONL 协议与 Agent 通信，管理操作使用独立 CLI。</p>
+
+          </div>
+
+        </div>
+        <details class="mobile-toc"><summary><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>本页内容<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></summary><div><a href="#section-1">进程与通道</a><a href="#section-2">常用消息</a><a href="#section-3">不要混用管理协议</a><a href="#section-4">退出和错误</a></div></details>
+        <section><h2 id="section-1">进程与通道<a class="anchor" href="#section-1" aria-label="进程与通道的链接">#</a></h2><p>一个客户端任务绑定一个 Agent 进程 / Pi Session。使用 spawn 或 execFile 的参数数组传递路径，不拼接 shell 命令。</p><pre><code class="language-javascript">import { spawn } from &#x27;node:child_process&#x27;;
 
 const child = spawn(process.execPath, [
   &#x27;/absolute/tunmo-agent/bin/tunmo-agent.mjs&#x27;,
@@ -7,7 +91,25 @@ const child = spawn(process.execPath, [
 ], { stdio: [&#x27;pipe&#x27;, &#x27;pipe&#x27;, &#x27;pipe&#x27;] });
 
 // 等收到 ready 通知后，再向 stdin 写入命令。
-// stdout 按换行分帧；stderr 单独处理诊断。</code></pre><p>生产发行先通过 src/bootstrap.mjs 定位和验证随包 Node。上例用于满足项目版本要求的 Node 环境，不假设 Electron 的 process.execPath 就是独立 Node。</p></section><section><h2 id="section-2">常用消息<a class="anchor" href="#section-2" aria-label="常用消息的链接">#</a></h2><pre><code class="language-json">{&quot;id&quot;:&quot;state-1&quot;,&quot;type&quot;:&quot;get_state&quot;}
+// stdout 按换行分帧；stderr 单独处理诊断。</code></pre><p>生产发行先通过 src/bootstrap.mjs 定位和验证随包 Node。上例用于满足项目版本要求的 Node 环境，不假设 Electron 的 process.execPath 就是独立 Node。</p></section>
+        <section><h2 id="section-2">常用消息<a class="anchor" href="#section-2" aria-label="常用消息的链接">#</a></h2><pre><code class="language-json">{&quot;id&quot;:&quot;state-1&quot;,&quot;type&quot;:&quot;get_state&quot;}
 {&quot;id&quot;:&quot;commands-1&quot;,&quot;type&quot;:&quot;get_commands&quot;}
 {&quot;id&quot;:&quot;prompt-1&quot;,&quot;type&quot;:&quot;prompt&quot;,&quot;message&quot;:&quot;检查当前项目的数据文件。&quot;}
-{&quot;id&quot;:&quot;abort-1&quot;,&quot;type&quot;:&quot;abort&quot;}</code></pre><p>以上为独立消息示例。通过 id 关联响应，并处理原生消息、工具执行和扩展 UI 事件。完整协议以项目锁定的 Pi 0.84.1 为准。</p><p>就绪标记使用 <code>extension_ui_request / notify</code>，工具进度使用 <code>tool_execution_update</code>，Worker 进度在 <code>details.execution</code> 中呈现。</p></section><section><h2 id="section-3">不要混用管理协议<a class="anchor" href="#section-3" aria-label="不要混用管理协议的链接">#</a></h2><p>Agent 不提供 tunmo.* 私有 RPC，也不拦截或改写 Pi 原生命令。扩展管理运行 bin/tunmo-extension.mjs，可选模块运行 bin/tunmo-module.mjs；这些命令不能写入 Agent stdin。</p><p>get_commands 用来观察命令与 Skill，不能把它当作完整工具 schema 查询接口。Pi 的 new_session、switch_session、fork、clone 仍保持原生语义；客户端并行任务应各自创建进程，不用会话切换代替多任务隔离。</p></section><section><h2 id="section-4">退出和错误<a class="anchor" href="#section-4" aria-label="退出和错误的链接">#</a></h2><p>stdin EOF 正常退出；SIGTERM / SIGHUP 沿用 Pi 的 143 / 129 语义。启动参数错误为 2，配置初始化失败为 20，内置资源校验失败为 21，Host 必选扩展未就绪为 22，启动器内部错误为 70。其他阶段应结合 stderr 和实际退出码判断。</p><p>abort 请求与子进程真正结束之间存在清理过程。客户端应等待终态，保留部分输出和失败结果的区别，不把取消确认当成产物成功。</p></section><details class="sources"><summary>内容依据 · 对应仓库文件</summary><ul><li><code>src/launcher.ts</code></li><li><code>src/bootstrap.mjs</code></li><li><code>src/extension-host/host.ts</code></li><li><code>docs/architecture.md</code></li><li><code>docs/electron-runtime-verification.md</code></li></ul><p>路径相对于仓库根目录；以当前检出源码为准。</p></details><nav class="pagination" aria-label="上一篇和下一篇"><a href="geopandas.html"><small>上一篇</small>GeoPandas 矢量分析 </a><a href="extensions.html"><small>下一篇</small>扩展与 SDK →</a></nav><footer><span>Tunmo · 图墨 Agent</span><span>源码核对 2026-09-20 · 历史验收见各自记录</span></footer></main><aside class="toc" aria-label="本页目录"><p>本页内容</p><a href="#section-1">进程与通道</a><a href="#section-2">常用消息</a><a href="#section-3">不要混用管理协议</a><a href="#section-4">退出和错误</a><div class="toc-bottom">让工具理解上下文。<br>让工作有迹可循。</div></aside></div></div><dialog class="search-dialog" aria-label="搜索文档"><div class="search-box"><span>⌕</span><input type="search" placeholder="搜索功能、工具名称或错误…" aria-label="搜索文档" autocomplete="off"><button class="close-search" aria-label="关闭搜索">Esc</button></div><div class="search-results" aria-live="polite"></div><div class="search-help">全文本地搜索 · Enter 打开首条结果 · Esc 关闭</div></dialog><div class="toast" role="status"></div></body></html>
+{&quot;id&quot;:&quot;abort-1&quot;,&quot;type&quot;:&quot;abort&quot;}</code></pre><p>以上为独立消息示例。通过 id 关联响应，并处理原生消息、工具执行和扩展 UI 事件。完整协议以项目锁定的 Pi 0.84.1 为准。</p><p>就绪标记使用 <code>extension_ui_request / notify</code>，工具进度使用 <code>tool_execution_update</code>，Worker 进度在 <code>details.execution</code> 中呈现。</p></section>
+        <section><h2 id="section-3">不要混用管理协议<a class="anchor" href="#section-3" aria-label="不要混用管理协议的链接">#</a></h2><p>Agent 不提供 tunmo.* 私有 RPC，也不拦截或改写 Pi 原生命令。扩展管理运行 bin/tunmo-extension.mjs，可选模块运行 bin/tunmo-module.mjs；这些命令不能写入 Agent stdin。</p><p>get_commands 用来观察命令与 Skill，不能把它当作完整工具 schema 查询接口。Pi 的 new_session、switch_session、fork、clone 仍保持原生语义；客户端并行任务应各自创建进程，不用会话切换代替多任务隔离。</p></section>
+        <section><h2 id="section-4">退出和错误<a class="anchor" href="#section-4" aria-label="退出和错误的链接">#</a></h2><p>stdin EOF 正常退出；SIGTERM / SIGHUP 沿用 Pi 的 143 / 129 语义。启动参数错误为 2，配置初始化失败为 20，内置资源校验失败为 21，Host 必选扩展未就绪为 22，启动器内部错误为 70。其他阶段应结合 stderr 和实际退出码判断。</p><p>abort 请求与子进程真正结束之间存在清理过程。客户端应等待终态，保留部分输出和失败结果的区别，不把取消确认当成产物成功。</p></section>
+        <details class="sources"><summary><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h6"/></svg>内容依据 · 对应仓库文件<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></summary><ul><li><code>src/launcher.ts</code></li><li><code>src/bootstrap.mjs</code></li><li><code>src/extension-host/host.ts</code></li><li><code>docs/architecture.md</code></li><li><code>docs/electron-runtime-verification.md</code></li></ul><p>路径相对于仓库根目录；以当前检出源码为准。</p></details>
+        <nav class="pagination" aria-label="上一篇和下一篇"><a href="geopandas.html"><small>上一篇</small><span><svg class="icon reverse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>GeoPandas 矢量分析</span></a><a href="extensions.html"><small>下一篇</small><span>扩展与 SDK<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></a></nav>
+        <footer><span>Tunmo <span class="footer-dot">/</span> 图墨 Agent</span><span>源码核对 2026-09-20 · 历史验收见各自记录</span></footer>
+      </main>
+      <aside class="toc" aria-label="本页目录"><p>本页内容</p><nav><a href="#section-1">进程与通道</a><a href="#section-2">常用消息</a><a href="#section-3">不要混用管理协议</a><a href="#section-4">退出和错误</a></nav><div class="toc-bottom">让工具理解上下文。<br>让工作有迹可循。</div><a class="back-to-top" href="#main">返回顶部 ↑</a></aside>
+    </div>
+  </div>
+  <dialog class="search-dialog" aria-label="搜索文档">
+    <div class="search-box"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><input type="search" placeholder="搜索功能、工具名称或错误…" aria-label="搜索文档" autocomplete="off"><button class="close-search" aria-label="关闭搜索">Esc</button></div>
+    <div class="search-results" aria-live="polite"></div>
+    <div class="search-help"><span>本地全文搜索</span><span>↑ ↓ 选择 · Enter 打开 · Esc 关闭</span></div>
+  </dialog>
+  <div class="toast" role="status"></div>
+</body>
+</html>
