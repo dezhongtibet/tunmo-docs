@@ -4,7 +4,7 @@ Use the current source checkout as the authority, distinguishing implemented cap
 
 ## Documentation baseline
 
-<p>Source review date: 2026-09-20. The documentation was first organized on 2026-09-17. This revision updates the main entry points and limitations against the current launcher, configuration, CLI, SDK, extension manifests, and usage contracts. package.json identifies the package as <code>@tunmo/agent 0.0.0</code>, a development package that cannot be published directly to npm. It pins Pi 0.84.1 and pi-goal 0.54.4. The QGIS extension is version 0.4.1, and GeoPandas is version 0.2.0.</p><p>This review does not mean that all functional tests, network verification, runtime downloads, or cross-platform GIS acceptance tests were repeated. Dated release and acceptance records establish only the scope documented at that time. A development version number is not a commitment to a stable release.</p>
+<p>Source review date: 2026-09-24. The documentation was first organized on 2026-09-17. This revision updates the main entry points and limitations against the current launcher, configuration, CLI, SDK, extension manifests, and usage contracts. package.json identifies the package as <code>@tunmo/agent 0.0.0</code>, a development package that cannot be published directly to npm. It pins Pi 0.87.1 and pi-goal 0.54.4. The QGIS extension is version 0.4.1, and GeoPandas is version 0.2.0.</p><p>This review does not mean that all functional tests, network verification, runtime downloads, or cross-platform GIS acceptance tests were repeated. Dated release and acceptance records establish only the scope documented at that time. A development version number is not a commitment to a stable release.</p>
 
 ## Known scope
 

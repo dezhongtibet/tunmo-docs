@@ -9,7 +9,7 @@
   <link rel="alternate" hreflang="en" href="en/rpc.html">
   <title>会话与 RPC 接入 · Tunmo Agent 文档</title>
   <link rel="stylesheet" href="assets/styles.css?v=4158e812a42b">
-  <script src="assets/search-index.js?v=adcfe906cb6b" defer></script>
+  <script src="assets/search-index.js?v=8b80ff8b047a" defer></script>
   <script src="assets/app.js?v=29a07a919544" defer></script>
   <script src="assets/versions.js?v=480a6ed37b51" defer></script>
 </head>
@@ -96,7 +96,7 @@ const child = spawn(process.execPath, [
         <section><h2 id="section-2">常用消息<a class="anchor" href="#section-2" aria-label="常用消息的链接">#</a></h2><pre><code class="language-json">{&quot;id&quot;:&quot;state-1&quot;,&quot;type&quot;:&quot;get_state&quot;}
 {&quot;id&quot;:&quot;commands-1&quot;,&quot;type&quot;:&quot;get_commands&quot;}
 {&quot;id&quot;:&quot;prompt-1&quot;,&quot;type&quot;:&quot;prompt&quot;,&quot;message&quot;:&quot;检查当前项目的数据文件。&quot;}
-{&quot;id&quot;:&quot;abort-1&quot;,&quot;type&quot;:&quot;abort&quot;}</code></pre><p>以上为独立消息示例。通过 id 关联响应，并处理原生消息、工具执行和扩展 UI 事件。完整协议以项目锁定的 Pi 0.84.1 为准。</p><p>就绪标记使用 <code>extension_ui_request / notify</code>，工具进度使用 <code>tool_execution_update</code>，Worker 进度在 <code>details.execution</code> 中呈现。</p></section>
+{&quot;id&quot;:&quot;abort-1&quot;,&quot;type&quot;:&quot;abort&quot;}</code></pre><p>以上为独立消息示例。通过 id 关联响应，并处理原生消息、工具执行和扩展 UI 事件。完整协议以项目锁定的 Pi 0.87.1 为准。</p><p>就绪标记使用 <code>extension_ui_request / notify</code>，工具进度使用 <code>tool_execution_update</code>，Worker 进度在 <code>details.execution</code> 中呈现。</p></section>
         <section><h2 id="section-3">不要混用管理协议<a class="anchor" href="#section-3" aria-label="不要混用管理协议的链接">#</a></h2><p>Agent 不提供 tunmo.* 私有 RPC，也不拦截或改写 Pi 原生命令。扩展管理运行 bin/tunmo-extension.mjs，可选模块运行 bin/tunmo-module.mjs；这些命令不能写入 Agent stdin。</p><p>get_commands 用来观察命令与 Skill，不能把它当作完整工具 schema 查询接口。Pi 的 new_session、switch_session、fork、clone 仍保持原生语义；客户端并行任务应各自创建进程，不用会话切换代替多任务隔离。</p></section>
         <section><h2 id="section-4">退出和错误<a class="anchor" href="#section-4" aria-label="退出和错误的链接">#</a></h2><p>stdin EOF 正常退出；SIGTERM / SIGHUP 沿用 Pi 的 143 / 129 语义。启动参数错误为 2，配置初始化失败为 20，内置资源校验失败为 21，Host 必选扩展未就绪为 22，启动器内部错误为 70。其他阶段应结合 stderr 和实际退出码判断。</p><p>abort 请求与子进程真正结束之间存在清理过程。客户端应等待终态，保留部分输出和失败结果的区别，不把取消确认当成产物成功。</p></section>
         <details class="sources"><summary><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h6"/></svg>内容依据 · 对应仓库文件<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></summary><ul><li><code>src/launcher.ts</code></li><li><code>src/bootstrap.mjs</code></li><li><code>src/extension-host/host.ts</code></li><li><code>docs/architecture.md</code></li><li><code>docs/electron-runtime-verification.md</code></li></ul><p>路径相对于仓库根目录；以当前检出源码为准。</p></details>

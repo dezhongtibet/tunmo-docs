@@ -20,7 +20,7 @@ const child = spawn(process.execPath, [
 <pre><code class="language-json">{&quot;id&quot;:&quot;state-1&quot;,&quot;type&quot;:&quot;get_state&quot;}
 {&quot;id&quot;:&quot;commands-1&quot;,&quot;type&quot;:&quot;get_commands&quot;}
 {&quot;id&quot;:&quot;prompt-1&quot;,&quot;type&quot;:&quot;prompt&quot;,&quot;message&quot;:&quot;检查当前项目的数据文件。&quot;}
-{&quot;id&quot;:&quot;abort-1&quot;,&quot;type&quot;:&quot;abort&quot;}</code></pre><p>以上为独立消息示例。通过 id 关联响应，并处理原生消息、工具执行和扩展 UI 事件。完整协议以项目锁定的 Pi 0.84.1 为准。</p><p>就绪标记使用 <code>extension_ui_request / notify</code>，工具进度使用 <code>tool_execution_update</code>，Worker 进度在 <code>details.execution</code> 中呈现。</p>
+{&quot;id&quot;:&quot;abort-1&quot;,&quot;type&quot;:&quot;abort&quot;}</code></pre><p>以上为独立消息示例。通过 id 关联响应，并处理原生消息、工具执行和扩展 UI 事件。完整协议以项目锁定的 Pi 0.87.1 为准。</p><p>就绪标记使用 <code>extension_ui_request / notify</code>，工具进度使用 <code>tool_execution_update</code>，Worker 进度在 <code>details.execution</code> 中呈现。</p>
 
 ## 不要混用管理协议
 

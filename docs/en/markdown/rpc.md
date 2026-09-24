@@ -20,7 +20,7 @@ const child = spawn(process.execPath, [
 <pre><code class="language-json">{&quot;id&quot;:&quot;state-1&quot;,&quot;type&quot;:&quot;get_state&quot;}
 {&quot;id&quot;:&quot;commands-1&quot;,&quot;type&quot;:&quot;get_commands&quot;}
 {&quot;id&quot;:&quot;prompt-1&quot;,&quot;type&quot;:&quot;prompt&quot;,&quot;message&quot;:&quot;Inspect the data files in the current project.&quot;}
-{&quot;id&quot;:&quot;abort-1&quot;,&quot;type&quot;:&quot;abort&quot;}</code></pre><p>These are separate message examples. Correlate responses by id and handle native messages, tool execution, and extension UI events. Refer to the project's pinned Pi 0.84.1 for the complete protocol.</p><p>The readiness marker uses <code>extension_ui_request / notify</code>. Tool progress uses <code>tool_execution_update</code>, with worker progress presented in <code>details.execution</code>.</p>
+{&quot;id&quot;:&quot;abort-1&quot;,&quot;type&quot;:&quot;abort&quot;}</code></pre><p>These are separate message examples. Correlate responses by id and handle native messages, tool execution, and extension UI events. Refer to the project's pinned Pi 0.87.1 for the complete protocol.</p><p>The readiness marker uses <code>extension_ui_request / notify</code>. Tool progress uses <code>tool_execution_update</code>, with worker progress presented in <code>details.execution</code>.</p>
 
 ## Keep management protocols separate
 
