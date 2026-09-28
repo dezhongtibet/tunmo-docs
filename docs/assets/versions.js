@@ -120,10 +120,8 @@
         option.href = destination.url.href;
         option.dataset.version = version.id;
         if (destination.note) {
-          const note = document.createElement('span');
-          note.className = 'version-note';
-          note.textContent = destination.note;
-          option.append(note);
+          option.title = destination.note;
+          option.setAttribute('aria-label', `${version.id}${english ? ', ' : '，'}${destination.note}`);
         }
       }
       fragment.append(option);

@@ -1259,13 +1259,6 @@ a.version-option:focus-visible {
 .version-option:focus-visible {
   outline-offset: -2px;
 }
-.version-note {
-  grid-column: 1 / -1;
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 400;
-  line-height: 16px;
-}
 .version-status {
   margin: 10px 0 0;
   padding: 0 2px;
