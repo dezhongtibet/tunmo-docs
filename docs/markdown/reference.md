@@ -4,7 +4,7 @@
 
 ## 文档基线
 
-<p>源码核对日期：2026-09-24。文档最初整理于 2026-09-17，本轮按当前 launcher、配置、CLI、SDK、扩展清单及使用契约更新主要入口和限制。package.json 标识为 <code>@tunmo/agent 0.0.0</code>（不可直接 npm 发布的开发包），锁定 Pi 0.87.1 和 pi-goal 0.54.4；QGIS 扩展为 0.4.1，GeoPandas 为 0.2.0。</p><p>这次核对不等于重新完成所有业务测试、联网验证、Runtime 下载或跨平台 GIS 验收。带日期的发行和验收记录只证明各自当时注明的范围；开发版本号不构成稳定发行承诺。</p>
+<p>源码核对日期：2026-09-28。文档最初整理于 2026-09-17，本轮按当前 launcher、配置、CLI、SDK、扩展清单及使用契约更新主要入口和限制。package.json 标识为 <code>@tunmo/agent 0.0.0</code>（不可直接 npm 发布的开发包），锁定 Pi 0.87.1 和 pi-goal 0.54.4；QGIS 扩展为 0.4.1，GeoPandas 为 0.2.0。</p><p>这次核对不等于重新完成所有业务测试、联网验证、Runtime 下载或跨平台 GIS 验收。带日期的发行和验收记录只证明各自当时注明的范围；开发版本号不构成稳定发行承诺。</p>
 
 ## 已知范围
 
@@ -12,11 +12,11 @@
 
 ## 源码与历史记录
 
-<p>各页末尾列出相对于 Agent 仓库根目录的内容依据。使用完整源码 checkout 阅读；以 <code>optional-extensions/</code> 开头的来源还需要对应私有子模块的读取权限。本站的工具与安装说明已经独立整理，不要求读者获得开发者本机目录或交接记录。</p><p>仓库发布 <code>docs/</code> 根目录的 8 篇核心技术文档和本站内容。设计方案、来源审计、运行包记录、历史交接与原始验证证据保留在维护者本地分类目录，由 <code>.gitignore</code> 排除，不随本次文档发布提供。历史结论不能代替当前清单和源码。</p>
+<p>各页末尾列出相对于 Agent 仓库根目录的内容依据。使用完整源码 checkout 阅读；以 <code>optional-extensions/</code> 开头的来源还需要对应私有子模块的读取权限。本站的工具与安装说明已经独立整理，不要求读者获得开发者本机目录或交接记录。</p><p>仓库发布 <code>docs/</code> 根目录的 9 篇核心技术文档和本站内容。设计方案、来源审计、运行包记录、历史交接与原始验证证据保留在维护者本地分类目录，由 <code>.gitignore</code> 排除，不随本次文档发布提供。历史结论不能代替当前清单和源码。</p>
 
 ## 更新文档
 
-<p>所有站点文件都位于 docs/public，可直接打开 index.html 或通过任意静态 HTTP 服务浏览，无外部字体、CDN 或运行时依赖。</p><p>content.json 与 content.en.json 分别维护中文和英文内容。两者的页面 ID、章节 ID、顺序和源码依据必须一一对应。修改后运行：</p><pre><code class="language-bash">node docs/public/build.mjs</code></pre><p>生成中英文各 14 个独立 HTML 页面，以及各自的全文搜索索引和 Markdown 副本。中文位于站点根目录，英文位于 en/；顶栏语言入口可切换当前页面，并保留章节锚点。assets/styles.css 与 assets/app.js 维护样式和交互。维护说明见同目录 README.md。涉及工具、配置或平台变化时同步核对对应源码，避免只沿用旧交接记录。</p>
+<p>所有站点文件都位于 docs/public，可直接打开 index.html 或通过任意静态 HTTP 服务浏览，无外部字体、CDN 或运行时依赖。</p><p>content.json 与 content.en.json 分别维护中文和英文内容。两者的页面 ID、章节 ID、顺序和源码依据必须一一对应。修改后运行：</p><pre><code class="language-bash">node docs/public/build.mjs</code></pre><p>生成中英文各 15 个独立 HTML 页面，以及各自的全文搜索索引和 Markdown 副本。中文位于站点根目录，英文位于 en/；顶栏语言入口可切换当前页面，并保留章节锚点。assets/styles.css 与 assets/app.js 维护样式和交互。维护说明见同目录 README.md。涉及工具、配置或平台变化时同步核对对应源码，避免只沿用旧交接记录。</p>
 
 ## 内容依据
 

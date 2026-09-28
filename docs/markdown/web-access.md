@@ -8,7 +8,7 @@
 
 ## 读取网页
 
-<p><code>web_read</code> 接收 <code>url</code> 和可选 <code>maxChars</code>（最小 200），支持 HTTP/HTTPS 文本、HTML、JSON、XML 等内容。HTML 提取为正文；不执行网页 JavaScript，也不提供浏览器交互。</p><pre><code class="language-json">{&quot;url&quot;:&quot;https://example.com/&quot;,&quot;maxChars&quot;:12000}</code></pre><p>默认正文字符上限为 40,000，响应默认限制 5 MiB。结果包含最终 URL、重定向、状态码、字节数和截断标记。长页面被截断时不要把结果当成全文；PDF、图片等二进制不在此读取范围内。</p>
+<p><code>web_read</code> 接收 <code>url</code> 和可选 <code>maxChars</code>（最小 200），支持 HTTP/HTTPS 文本、HTML、JSON、XML 等内容。HTML 提取为正文；不执行网页 JavaScript，也不提供浏览器交互。</p><pre><code class="language-json">{&quot;url&quot;:&quot;https://example.com/&quot;,&quot;maxChars&quot;:12000}</code></pre><p>默认正文字符上限为 40,000，响应默认限制 5 MiB。结果包含最终 URL、重定向、状态码、字节数和截断标记。长页面被截断时不要把结果当成全文；PDF、图片等二进制不在此读取范围内。</p><p>如需执行 JavaScript 或点击、填写页面，参见<a href="browser.md">网页交互自动化</a>。</p>
 
 ## 配置搜索服务
 

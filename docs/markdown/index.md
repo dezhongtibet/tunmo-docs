@@ -12,7 +12,7 @@
 
 ## 能力与可用范围
 
-<ul><li><strong>基础会话：</strong>一个任务对应一个 Agent 进程，使用 Pi 原生消息和工具事件。</li><li><strong>内置能力：</strong>Web Search、Web Read、Goal Mode，以及 tunmo-agent / skill-creator Skills。</li><li><strong>可选能力：</strong>QGIS 工具和 GeoPandas 工具具有独立源码与 Runtime；是否可安装还取决于当前发行配置和平台。</li><li><strong>扩展开发：</strong>清单驱动注册、共享 Runtime、产物保存和执行控制。</li></ul><aside class="note"><strong>使用提示</strong><p>默认模块清单已登记 QGIS 和 GeoPandas；两者默认关闭，按模块分别确认安装并启用。详细边界见「GeoPandas」和「版本与范围」。云端执行目前只有显式启用的本机模拟后端。</p></aside><p>从源码使用可选模块需要取得私有 <code>tunmo-plugins</code> 仓库的读取权限，或由维护者提供与 Agent 版本匹配的完整发行包。公开文档与主仓库源码不等于全部可选资源已经公开；准备步骤见<a href="quickstart.md">快速开始</a>。</p>
+<ul><li><strong>基础会话：</strong>一个任务对应一个 Agent 进程，使用 Pi 原生消息和工具事件。</li><li><strong>网页交互：</strong>通过浏览器工具打开页面、获取快照、点击、填写和截图；首次使用可自动准备 Chrome。</li><li><strong>内置能力：</strong>Web Search、Web Read、Goal Mode，以及 tunmo-agent / skill-creator Skills。</li><li><strong>可选能力：</strong>QGIS 工具和 GeoPandas 工具具有独立源码与 Runtime；是否可安装还取决于当前发行配置和平台。</li><li><strong>扩展开发：</strong>清单驱动注册、共享 Runtime、产物保存和执行控制。</li></ul><aside class="note"><strong>使用提示</strong><p>默认模块清单已登记 QGIS 和 GeoPandas；两者默认关闭，按模块分别确认安装并启用。详细边界见「GeoPandas」和「版本与范围」。云端执行目前只有显式启用的本机模拟后端。</p></aside><p>从源码使用可选模块需要取得私有 <code>tunmo-plugins</code> 仓库的读取权限，或由维护者提供与 Agent 版本匹配的完整发行包。公开文档与主仓库源码不等于全部可选资源已经公开；准备步骤见<a href="quickstart.md">快速开始</a>。</p>
 
 ## 按你的角色阅读
 

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="打开网页、获取交互快照、点击、填写与截图，并了解首次浏览器准备和已有 CDP 浏览器接入。">
+  <meta name="color-scheme" content="light dark">
+  <link rel="alternate" hreflang="zh-CN" href="browser.html">
+  <link rel="alternate" hreflang="en" href="en/browser.html">
+  <title>网页交互自动化 · Tunmo Agent 文档</title>
+  <link rel="stylesheet" href="assets/styles.css?v=4158e812a42b">
+  <script src="assets/search-index.js?v=c9e548f3350f" defer></script>
+  <script src="assets/app.js?v=29a07a919544" defer></script>
+  <script src="assets/versions.js?v=480a6ed37b51" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到正文</a>
+  <div class="scrim" hidden></div>
+  <aside class="sidebar" id="navigation" aria-label="文档导航">
+    <div class="sidebar-header">
+      <a class="brand" href="index.html" aria-label="Tunmo 文档首页"><span class="brand-logo" role="img" aria-label="Tunmo"></span></a>
+      <button class="menu-close icon-button" aria-label="关闭导航"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="edition">图墨 Agent 文档 <span>latest</span></div>
+    <button class="search-trigger" aria-label="搜索文档"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><span>搜索文档</span><kbd>⌘ K</kbd></button>
+    <div class="sidebar-scroll"><nav aria-label="所有文档"><div class="nav-group"><p>开始使用</p><a href="index.html"><span>欢迎使用 Tunmo Agent</span></a><a href="quickstart.html"><span>安装与快速开始</span></a><a href="configuration.html"><span>配置与数据目录</span></a></div><div class="nav-group"><p>核心能力</p><a href="web-access.html"><span>联网搜索与网页读取</span></a><a href="browser.html" aria-current="page"><span>网页交互自动化</span><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a><a href="goals.html"><span>目标模式 Goal</span></a><a href="skills.html"><span>Skills 与知识复用</span></a></div><div class="nav-group"><p>地理空间能力</p><a href="modules.html"><span>可选模块管理</span></a><a href="qgis.html"><span>QGIS 空间处理</span></a><a href="geopandas.html"><span>GeoPandas 矢量分析</span></a></div><div class="nav-group"><p>开发者指南</p><a href="rpc.html"><span>会话与 RPC 接入</span></a><a href="extensions.html"><span>扩展与 SDK</span></a><a href="runtimes.html"><span>Runtime 与执行生命周期</span></a></div><div class="nav-group"><p>参考与支持</p><a href="troubleshooting.html"><span>故障排查</span></a><a href="reference.html"><span>版本、范围与文档维护</span></a></div></nav></div>
+    <div class="sidebar-bottom"><span class="status-dot"></span>中文文档<span class="sidebar-tag">TUNMO AGENT</span></div>
+  </aside>
+  <div class="shell">
+    <header class="topbar">
+      <button class="menu-toggle icon-button" aria-label="打开导航" aria-controls="navigation" aria-expanded="false"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div class="breadcrumb"><a href="index.html">文档</a><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg><span title="核心能力">核心能力</span></div>
+      <div class="top-actions">
+        <nav class="language-selector" aria-label="文档语言"><span class="language-option" lang="zh-CN" aria-current="page">中文</span><a class="language-option language-switch" href="en/browser.html" lang="en" hreflang="en" aria-label="切换到英文" title="切换到英文">EN</a></nav>
+        <div class="language-dropdown">
+          <button class="language-trigger icon-button" type="button" aria-label="切换语言" aria-expanded="false" aria-controls="language-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6m-7 0 6-6 2-3M2 5h12M7 2v3m15 17-5-11-5 11m2-4h6"/></svg><svg class="icon language-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+          <div class="language-menu" id="language-options" hidden>
+            <nav class="language-menu-options" aria-label="文档语言">
+              <span class="language-menu-current" lang="zh-CN" aria-current="page">简体中文</span>
+              <a class="language-menu-option language-switch" href="en/browser.html" lang="en" hreflang="en" aria-label="切换到英文">English</a>
+            </nav>
+          </div>
+        </div>
+        <button class="search-trigger top-search icon-button" aria-label="搜索文档"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg></button>
+        <div class="download-control">
+          <button class="download-trigger icon-button" type="button" aria-label="下载" aria-expanded="false" aria-controls="download-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg></button>
+          <div class="download-menu" id="download-options" hidden>
+            <div class="download-options">
+              <a class="download-option" href="markdown/browser.md" download="browser.md"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h6"/></svg><span>Markdown 文档</span></a>
+            </div>
+          </div>
+        </div>
+        <span class="action-divider" aria-hidden="true"></span>
+        <button class="theme-toggle icon-button" aria-label="切换深色模式"><svg class="icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg></button>
+        <button class="phone-tools-toggle icon-button" type="button" aria-label="打开更多选项" aria-expanded="false" aria-controls="phone-tools-panel"><svg class="icon tools-open-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h12M4 12h16M12 18h8"/></svg><svg class="icon tools-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+        <div class="phone-tools-panel" id="phone-tools-panel" role="region" aria-label="阅读选项" hidden>
+          <div class="phone-language-control">
+            <button class="phone-language-trigger" type="button" aria-label="切换语言，当前：简体中文" aria-expanded="false" aria-controls="phone-language-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6m-7 0 6-6 2-3M2 5h12M7 2v3m15 17-5-11-5 11m2-4h6"/></svg><span lang="zh-CN">简体中文</span><svg class="icon language-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+            <div class="phone-language-menu" id="phone-language-options" hidden>
+              <nav class="phone-language-options" aria-label="文档语言">
+                <span class="language-menu-current" lang="zh-CN" aria-current="page">简体中文</span>
+                <a class="phone-language-option language-menu-option language-switch" href="en/browser.html" lang="en" hreflang="en" aria-label="切换到英文">English</a>
+              </nav>
+            </div>
+          </div>
+          <div class="phone-appearance">
+            <span>外观</span>
+            <button class="theme-toggle phone-theme-toggle" type="button" role="switch" aria-label="深色模式" aria-checked="false"><span class="theme-thumb"><svg class="icon theme-light-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg><svg class="icon theme-dark-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z"/></svg></span></button>
+          </div>
+          <a class="phone-download" href="markdown/browser.md" download="browser.md"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4"/></svg><span>Markdown 文档</span></a>
+        </div>
+      </div>
+    </header>
+    <div class="reading-layout">
+      <main id="main" tabindex="-1">
+        <div class="page-heading ">
+          <div class="heading-content">
+            <div class="eyebrow"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v16M3 4c4-1 6 0 9 2 3-2 5-3 9-2v15c-4-1-6 0-9 2-3-2-5-3-9-2Z"/></svg><span>核心能力</span></div>
+            <h1>网页交互自动化</h1>
+            <p class="lead">打开网页、获取交互快照、点击、填写与截图，并了解首次浏览器准备和已有 CDP 浏览器接入。</p>
+
+          </div>
+
+        </div>
+        <details class="mobile-toc"><summary><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>本页内容<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></summary><div><a href="#section-1">浏览器工具与网页读取</a><a href="#section-2">首次使用本机浏览器</a><a href="#section-3">连接已有浏览器</a><a href="#section-4">前端如何接入</a><a href="#section-5">搜索凭据与验证范围</a></div></details>
+        <section><h2 id="section-1">浏览器工具与网页读取<a class="anchor" href="#section-1" aria-label="浏览器工具与网页读取的链接">#</a></h2><p>浏览器工具由项目本地 <code>pi-agent-browser-native</code> 与 <code>agent-browser</code> 提供。Agent 启动时从当前依赖目录加载 Pi 原生扩展及命令，无需全局安装。<code>agent_browser</code> 可打开页面、获取交互快照、点击、填写表单和截图；<code>agent_browser_code</code> 处理循环或分支，<code>agent_browser_tools</code> 列出并启用专门工具。</p><pre><code class="language-json">{"args":["open","https://example.com"]}
+{"args":["snapshot","-i"]}</code></pre><p>这些是工具参数示例；通过普通 prompt 交给模型使用，不直接写入 RPC stdin。<a href="web-access.html">web_read</a> 只提取网页文本，不运行 JavaScript 或进行页面交互。</p></section>
+        <section><h2 id="section-2">首次使用本机浏览器<a class="anchor" href="#section-2" aria-label="首次使用本机浏览器的链接">#</a></h2><p>首次调用需要本机浏览器的工具时，Agent 先检查 Chrome。若未找到且会话允许联网，会自动下载 Chrome for Testing，完成后重新检查；已有 Chrome 时直接继续。多个会话会等待同一次安装。客户端可从 Pi 原生 <code>extension_ui_request</code> 的 <code>setStatus</code> / <code>notify</code> 事件展示检查、下载、等待、完成及失败状态；下载期间显示已等待时间，上游命令没有可靠的字节进度百分比。</p><p><code>--offline</code> 会阻止自动下载，缺少 Chrome 时工具返回说明性错误；它不是浏览器页面访问的系统级网络隔离。Linux ARM64 没有对应 Chrome for Testing 安装包，需预先安装系统 Chromium。下载失败时检查网络和磁盘空间，再重新调用工具。</p></section>
+        <section><h2 id="section-3">连接已有浏览器<a class="anchor" href="#section-3" aria-label="连接已有浏览器的链接">#</a></h2><p>若客户端已经创建可通过 Chrome DevTools Protocol（CDP）访问的浏览器，可为 Agent 进程设置 <code>AGENT_BROWSER_CDP</code>，或调用 <code>agent_browser</code> 的 <code>connect &lt;port&gt;</code> / <code>--cdp &lt;port&gt;</code>。连接后沿用该浏览器会话，跳过本机 Chrome 安装检查。客户端负责开启 CDP、限制端点访问并管理自己创建的浏览器；CDP 提供完整浏览器控制权，只应暴露给可信进程。</p><p>没有已有连接时，<code>agent-browser</code> 默认启动独立的无界面（headless）受管浏览器，不会操作用户已打开的普通浏览器窗口。要观察新窗口，可在首次启动前设置 <code>AGENT_BROWSER_HEADED=1</code>，或在首次工具调用中使用 <code>--headed</code> 和 <code>sessionMode: fresh</code>；已有无界面会话不会自动变成可见窗口。Agent 提供工具能力，不表示具体客户端已提供浏览器画面或按钮。</p></section>
+        <section><h2 id="section-4">前端如何接入<a class="anchor" href="#section-4" aria-label="前端如何接入的链接">#</a></h2><p>前端使用已有的 Pi JSONL RPC，无需添加 <code>tunmo.*</code> 浏览器命令。每个任务启动独立 Agent 进程，等待 <code>extension_ui_request / notify</code> 中的 <code>tunmo-agent ready</code>，再发送普通 <code>prompt</code>：</p><pre><code class="language-json">{"id":"browser-task-1","type":"prompt","message":"使用浏览器打开 https://example.com，获取交互快照"}</code></pre><p>前端按行读取 <code>tool_execution_start</code>、<code>tool_execution_update</code>、<code>tool_execution_end</code> 和 <code>agent_end</code>，通过 <code>toolName</code> 识别浏览器工具，并从结果读取文本、图片或产物。<code>extension_ui_request</code> 中的 <code>setStatus</code>（<code>statusKey: tunmo.browser.setup</code>）用于显示或清除准备进度，<code>notify</code> 用于显示完成和错误通知；stderr 只作诊断。</p><p>若前端创建专用浏览器窗口，先启用它的 CDP 端点，再在启动 Agent 时设置 <code>AGENT_BROWSER_CDP</code>。窗口的显示和生命周期由前端负责。当前 RPC 只支持 Agent 在处理 prompt 时调用工具，前端不能直接发送 <code>type: agent_browser</code> 命令。需要确定性的地址栏、按钮或实时画面时，前端应直接控制自己的窗口并提供 UI。</p></section>
+        <section><h2 id="section-5">搜索凭据与验证范围<a class="anchor" href="#section-5" aria-label="搜索凭据与验证范围的链接">#</a></h2><p>打开、快照、点击、填写及截图不要求 Exa 或 Brave Search API Key。扩展附带的 <code>agent_browser_web_search</code> 是单独的可选工具，仅在配置对应凭据后启用；Tunmo 的 <code>web_search</code> 仍按 <a href="web-access.html">Web Access</a> 配置运行。</p><p><code>pnpm test:offline</code> 覆盖本地扩展注册、命令调用和安装准备流程，使用受控夹具，不证明真实网站、真实 Chrome 下载或特定客户端 CDP 接入。2026-09-28 完整离线回归已在 macOS ARM64 与 Windows ARM64 的 Node 24.0.0、24.21.0、25.9.0、26.10.0 上通过；未测试的未来 Node 版本仍需逐版验证。</p></section>
+        <details class="sources"><summary><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H5v18h14V8l-5-5Zm0 0v5h5M8 12h8m-8 4h6"/></svg>内容依据 · 对应仓库文件<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></summary><ul><li><code>package.json</code></li><li><code>src/browser-extension.mjs</code></li><li><code>src/browser-integration.ts</code></li><li><code>src/browser-setup.ts</code></li><li><code>src/launcher.ts</code></li><li><code>test/rpc/browser-native.integration.test.mjs</code></li><li><code>test/rpc/browser-setup.test.ts</code></li><li><code>docs/browser-automation.md</code></li></ul><p>路径相对于仓库根目录；以当前检出源码为准。</p></details>
+        <nav class="pagination" aria-label="上一篇和下一篇"><a href="web-access.html"><small>上一篇</small><span><svg class="icon reverse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg>联网搜索与网页读取</span></a><a href="goals.html"><small>下一篇</small><span>目标模式 Goal<svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></span></a></nav>
+        <footer><span>Tunmo <span class="footer-dot">/</span> 图墨 Agent</span><span>源码核对 2026-09-28 · 历史验收见各自记录</span></footer>
+      </main>
+      <aside class="toc" aria-label="本页目录"><p>本页内容</p><nav><a href="#section-1">浏览器工具与网页读取</a><a href="#section-2">首次使用本机浏览器</a><a href="#section-3">连接已有浏览器</a><a href="#section-4">前端如何接入</a><a href="#section-5">搜索凭据与验证范围</a></nav><div class="toc-bottom">让工具理解上下文。<br>让工作有迹可循。</div><a class="back-to-top" href="#main">返回顶部 ↑</a></aside>
+    </div>
+    <div class="version-picker" data-edition-root="./" data-version="latest" data-page="browser">
+      <button class="version-trigger" type="button" title="文档版本：latest" aria-label="切换文档版本，当前：latest" aria-expanded="false" aria-controls="version-options"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H5a2 2 0 0 0-2 2v13M17 6H9a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V10l-4-4Zm0 0v4h4M11 14h6m-6 4h6"/></svg><span class="version-label">latest</span></button>
+      <nav class="version-menu" id="version-options" aria-label="文档版本" hidden>
+        <div class="version-menu-content">
+          <p class="version-menu-title">文档版本</p>
+          <div class="version-list"><span class="version-option" aria-current="page"><span class="version-name">latest</span></span></div>
+          <p class="version-status" role="status" hidden></p>
+          <button class="version-retry" type="button" hidden>重试</button>
+        </div>
+      </nav>
+    </div>
+  </div>
+  <dialog class="search-dialog" aria-label="搜索文档">
+    <div class="search-box"><svg class="icon " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.5 4.5"/></svg><input type="search" placeholder="搜索功能、工具名称或错误…" aria-label="搜索文档" autocomplete="off"><button class="close-search" aria-label="关闭搜索">Esc</button></div>
+    <div class="search-results" aria-live="polite"></div>
+    <div class="search-help"><span>本地全文搜索</span><span>↑ ↓ 选择 · Enter 打开 · Esc 关闭</span></div>
+  </dialog>
+  <div class="toast" role="status"></div>
+</body>
+</html>

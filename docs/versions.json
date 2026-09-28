@@ -4,6 +4,7 @@
       "id": "latest",
       "pages": {
         "zh-CN": [
+          "browser",
           "configuration",
           "extensions",
           "geopandas",
@@ -20,6 +21,7 @@
           "web-access"
         ],
         "en": [
+          "browser",
           "configuration",
           "extensions",
           "geopandas",

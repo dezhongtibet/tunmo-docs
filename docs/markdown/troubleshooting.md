@@ -4,7 +4,7 @@
 
 ## 启动失败或没有就绪通知
 
-<ol><li>确认 Node 和 pnpm 版本，以及 --session-id / --cwd 是否有效。</li><li>读取 stderr；不要将诊断混入 stdout JSONL 解析。</li><li>检查依赖、发行资源以及私有子模块读取权限；完整源码 checkout 需初始化锁定的 optional-extensions，再执行 pnpm check:deps。</li><li>若配置被修复，检查 .bak 备份并恢复有效字段。</li></ol><p>内置文件摘要不匹配时恢复相符发行内容。只有正在开发并明确需要重封装内置内容时，才使用项目的 seal-release 流程；不要把重新签认作为跳过校验的通用修复。</p>
+<ol><li>确认 Node 和 pnpm 版本，以及 --session-id / --cwd 是否有效。</li><li>读取 stderr；不要将诊断混入 stdout JSONL 解析。</li><li>检查依赖、发行资源以及私有子模块读取权限；完整源码 checkout 需初始化锁定的 optional-extensions，再执行 pnpm check:deps。</li><li>若配置被修复，检查 .bak 备份并恢复有效字段。</li></ol><p>内置文件摘要不匹配时恢复相符发行内容。只有正在开发并明确需要重封装内置内容时，才使用项目的 seal-release 流程；不要把重新签认作为跳过校验的通用修复。</p><p>浏览器工具首次使用失败时，查看 <code>extension_ui_request</code> 中的状态和错误通知。离线且缺少 Chrome 时先在联网会话中完成自动安装；Linux ARM64 需安装系统 Chromium。连接已有 CDP 浏览器时检查端点是否可达。</p>
 
 ## 进程就绪但模型没有响应
 
