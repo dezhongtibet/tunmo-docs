@@ -1,0 +1,41 @@
+{
+  "versions": [
+    {
+      "id": "v0.1.1",
+      "pages": {
+        "zh-CN": [
+          "configuration",
+          "extensions",
+          "geopandas",
+          "goals",
+          "index",
+          "modules",
+          "qgis",
+          "quickstart",
+          "reference",
+          "rpc",
+          "runtimes",
+          "skills",
+          "troubleshooting",
+          "web-access"
+        ],
+        "en": [
+          "configuration",
+          "extensions",
+          "geopandas",
+          "goals",
+          "index",
+          "modules",
+          "qgis",
+          "quickstart",
+          "reference",
+          "rpc",
+          "runtimes",
+          "skills",
+          "troubleshooting",
+          "web-access"
+        ]
+      }
+    }
+  ]
+}
