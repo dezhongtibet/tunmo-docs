@@ -35,7 +35,7 @@ node bin/tunmo-agent.mjs --session-id hello-installed-001 --cwd /absolute/projec
 ## 随扩展分发 Skills
 
 <p>Host 0.1.4 起，可在 <code>extension.json</code> 添加以下字段（片段）。创建对应的 SKILL.md，并保持 Pi 兼容字段及其他清单内容：</p><pre><code class="language-json">{
-  &quot;compatibility&quot;: { &quot;extensionHost&quot;: &quot;^0.1.4&quot;, &quot;pi&quot;: &quot;0.87.1&quot; },
+  &quot;compatibility&quot;: { &quot;extensionHost&quot;: &quot;^0.1.4&quot;, &quot;pi&quot;: &quot;1.1.0&quot; },
   &quot;skills&quot;: [&quot;skills/my-skill/SKILL.md&quot;]
 }</code></pre><p>路径必须指向包内可读文件，不允许重复、缺失或越界。Skill 和引用资源随完整扩展打包，由内容摘要、安装版本和租约共同管理。</p><p>自动加载适用于受管安装与发行快照中已启用、依赖就绪的扩展。仅用 <code>--extension</code> 加载开发包时，另加 <code>--skill /absolute/new/hello/skills/my-skill/SKILL.md</code> 调试。新进程中用 <code>get_commands</code> 检查对应 <code>skill:*</code> 条目。停用后旧会话已加载的文本不会动态移除，新的会话才刷新；具体格式见<a href="skills.md">Skills 与知识复用</a>。</p>
 

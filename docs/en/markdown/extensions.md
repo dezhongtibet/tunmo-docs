@@ -35,7 +35,7 @@ node bin/tunmo-agent.mjs --session-id hello-installed-001 --cwd /absolute/projec
 ## Bundle Skills with an extension
 
 <p>Host 0.1.4 and later support these fields in <code>extension.json</code> (fragment). Create the referenced SKILL.md and retain the Pi compatibility field and the rest of the manifest:</p><pre><code class="language-json">{
-  &quot;compatibility&quot;: { &quot;extensionHost&quot;: &quot;^0.1.4&quot;, &quot;pi&quot;: &quot;0.87.1&quot; },
+  &quot;compatibility&quot;: { &quot;extensionHost&quot;: &quot;^0.1.4&quot;, &quot;pi&quot;: &quot;1.1.0&quot; },
   &quot;skills&quot;: [&quot;skills/my-skill/SKILL.md&quot;]
 }</code></pre><p>Paths must refer to readable files inside the package; duplicate, missing, or escaping paths are rejected. Package the Skill and its referenced resources with the extension so content digests, installation versions, and leases cover them.</p><p>Automatic loading applies to enabled, dependency-ready extensions in managed installations and release snapshots. For development loading through <code>--extension</code> alone, also pass <code>--skill /absolute/new/hello/skills/my-skill/SKILL.md</code>. In a new process, use <code>get_commands</code> to check the corresponding <code>skill:*</code> entry. Disabling does not remove text already loaded in an old session; new sessions refresh the list. See <a href="skills.md">Skills and knowledge reuse</a> for the format.</p>
 
