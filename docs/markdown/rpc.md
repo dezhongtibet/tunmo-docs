@@ -34,6 +34,24 @@ const child = spawn(process.execPath, [
 
 <ol><li>确认进程能启动并收到 ready；设置启动超时，监听进程 <code>error</code> / <code>close</code>，避免一直等待。</li><li>发送 <code>get_state</code>、<code>get_commands</code>，确认请求 ID 与响应匹配。这一步不需要调用模型。</li><li>通过原生 <code>prompt</code> 发送 <code>/tunmo-extensions</code> 或 <code>/tunmo-runtimes</code> 查看扩展与 Runtime 诊断，并消费扩展 UI 通知。ready 只保证必选扩展就绪，可选扩展仍可能加载失败。</li><li>配置模型后，实际调用<a href="extensions.md">Hello 示例</a>，检查工具名称、输入、结果和 <code>agent_settled</code>；再验证 abort、stdin EOF 和异常退出时客户端能结束等待、释放进程。</li></ol><p>区分“管理库安装为 ready”和“当前进程已激活工具”。新增、升级或补齐依赖后，用新的 Agent 进程验证。</p>
 
+## Skill 加载诊断
+
+<p>在 ready 后通过原生 <code>prompt</code> 调用 <code>/tunmo-skills-diagnostics [requestId]</code>，读取当前会话同一 Pi 加载器的结果。查询不调用模型，不写入会话历史。</p><pre><code class="language-json">{&quot;id&quot;:&quot;rpc-diag-1&quot;,&quot;type&quot;:&quot;prompt&quot;,&quot;message&quot;:&quot;/tunmo-skills-diagnostics diag-1&quot;}</code></pre><p>RPC <code>response</code> 只确认命令处理；诊断结果在 <code>extension_ui_request</code>、<code>method: notify</code> 的 <code>message</code> JSON 字符串中。解析后按 <code>kind: tunmo.skill-diagnostics</code> 与 <code>requestId</code> 关联结果，并核对 sessionId / cwd。requestId 可省略，返回 null；提供时须为 1–128 个 ASCII 字符，首字符为字母或数字，其余允许字母、数字、点、下划线、冒号和连字符。下面是解析后的通知示例：</p><pre><code class="language-json">{
+  &quot;schemaVersion&quot;: 1,
+  &quot;kind&quot;: &quot;tunmo.skill-diagnostics&quot;,
+  &quot;requestId&quot;: &quot;diag-1&quot;,
+  &quot;sessionId&quot;: &quot;client-task-001&quot;,
+  &quot;cwd&quot;: &quot;/absolute/project&quot;,
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;revision&quot;: 1,
+    &quot;status&quot;: &quot;ready&quot;,
+    &quot;skills&quot;: [],
+    &quot;diagnostics&quot;: [],
+    &quot;resolutionDiagnostics&quot;: []
+  }
+}</code></pre><ul><li><code>skills</code> 是当前实际加载的 Pi Skill 列表，保留文件路径与 sourceInfo。</li><li><code>diagnostics</code> 包含 Pi 校验和冲突，冲突保留 winnerPath / loserPath。warning 也可能对应加载失败，须结合 skills 判断，不能把所有 warning 都当作失败。</li><li><code>resolutionDiagnostics</code> 补充 settings 与包 manifest 的明确 Skill 路径缺失或根目录访问失败、本地包缺失、离线包不可用及包解析失败。每项有 code、type、message、resourceType，及可选 path、source、scope。package 级问题不能推断 Skill 名称。来源 URL 输出前移除凭据、查询与片段。</li><li><code>revision</code> 每次 reload 递增并清空旧诊断；status 为 ready / loading / failed。success 只表示成功读取快照，不能当作资源加载成功。</li></ul><p>显式禁用的资源、负向 selector 和未匹配 glob 不误报缺失。Pi 深层目录或符号链接扫描、包 manifest 解析回退的静默跳过仍不保证有诊断，空列表不能证明所有配置正常。</p><p>缺少依赖补丁时返回 <code>success: false</code>、<code>error.code: SkillDiagnosticsUnavailable</code>；非法标识为 SkillDiagnosticsRequestInvalid，读取异常为 SkillDiagnosticsReadFailed。客户端须显示查询错误，不能替换成空诊断数组。初始包解析失败继续使启动失败，可能没有 ready；持续读取 stderr，<code>tunmo-agent: skill-resolution </code> 后为一项 JSON。完整字段见仓库 <code>docs/architecture.md</code>。</p>
+
 ## 内容依据
 
 - `src/launcher.ts`
@@ -44,3 +62,5 @@ const child = spawn(process.execPath, [
 - `package.json`
 - `src/extension-host/host-status.ts`
 - `test/rpc/managed-native.integration.test.mjs`
+- `src/skill-diagnostics.ts`
+- `test/rpc/skill-diagnostics.integration.test.mjs`

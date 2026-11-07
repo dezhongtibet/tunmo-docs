@@ -34,6 +34,24 @@ const child = spawn(process.execPath, [
 
 <ol><li>Confirm startup and the ready notification. Set a startup deadline and handle process <code>error</code> / <code>close</code> events so the client cannot wait indefinitely.</li><li>Send <code>get_state</code> and <code>get_commands</code> and check response IDs. This step requires no model call.</li><li>Send <code>/tunmo-extensions</code> or <code>/tunmo-runtimes</code> through a native <code>prompt</code> to inspect diagnostics, consuming extension UI notifications. Readiness only guarantees required extensions are ready; optional extensions can still fail to load.</li><li>After configuring a model, invoke the <a href="extensions.md">Hello example</a> and inspect the tool name, input, result, and <code>agent_settled</code>. Also verify abort, stdin EOF, and unexpected exits end client waits and release processes.</li></ol><p>Distinguish an installation marked ready in the management store from a tool activated in the current process. Verify additions, upgrades, and newly resolved dependencies in a new Agent process.</p>
 
+## Skill load diagnostics
+
+<p>After ready, invoke <code>/tunmo-skills-diagnostics [requestId]</code> through native <code>prompt</code> to read the current session's Pi resource loader. The query makes no model call and adds no session messages.</p><pre><code class="language-json">{&quot;id&quot;:&quot;rpc-diag-1&quot;,&quot;type&quot;:&quot;prompt&quot;,&quot;message&quot;:&quot;/tunmo-skills-diagnostics diag-1&quot;}</code></pre><p>The RPC <code>response</code> only acknowledges command handling. Read the diagnostic envelope from the JSON string in <code>message</code> of an <code>extension_ui_request</code> with <code>method: notify</code>. Match <code>kind: tunmo.skill-diagnostics</code> and requestId, and verify sessionId / cwd. Omitting requestId returns null. A supplied ID uses 1–128 ASCII characters, starts with a letter or digit, and may then contain letters, digits, periods, underscores, colons and hyphens. The parsed notification looks like this:</p><pre><code class="language-json">{
+  &quot;schemaVersion&quot;: 1,
+  &quot;kind&quot;: &quot;tunmo.skill-diagnostics&quot;,
+  &quot;requestId&quot;: &quot;diag-1&quot;,
+  &quot;sessionId&quot;: &quot;client-task-001&quot;,
+  &quot;cwd&quot;: &quot;/absolute/project&quot;,
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;revision&quot;: 1,
+    &quot;status&quot;: &quot;ready&quot;,
+    &quot;skills&quot;: [],
+    &quot;diagnostics&quot;: [],
+    &quot;resolutionDiagnostics&quot;: []
+  }
+}</code></pre><ul><li><code>skills</code> contains the Skills actually loaded by Pi, including file paths and sourceInfo.</li><li><code>diagnostics</code> contains Pi validation and collisions, including winnerPath / loserPath. A warning may also mean a Skill was skipped; compare with skills instead of treating every warning as a failure.</li><li><code>resolutionDiagnostics</code> adds explicit missing or inaccessible Skill paths from settings / package manifests, missing local packages, packages unavailable offline, and package resolution failures. Entries contain code, type, message, resourceType and optional path, source, scope. Package issues do not imply a Skill name. Source URLs have credentials, queries and fragments removed.</li><li><code>revision</code> increases on reload and old diagnostics are cleared. status is ready / loading / failed. success means the snapshot was read, not that all resources loaded.</li></ul><p>Disabled resources, negative selectors and unmatched globs are not reported as missing. Silent skips in Pi's nested directory / symlink scans and package manifest parsing fallbacks may still lack diagnostics; an empty list does not prove every configured resource is healthy.</p><p>A missing dependency patch returns <code>success: false</code> and <code>error.code: SkillDiagnosticsUnavailable</code>. Invalid IDs return SkillDiagnosticsRequestInvalid; read errors return SkillDiagnosticsReadFailed. Show query errors instead of replacing them with empty arrays. Initial package resolution errors retain the original startup failure behavior and may prevent ready. Consume stderr continuously: each <code>tunmo-agent: skill-resolution </code> line contains a JSON diagnostic. See <code>docs/architecture.md</code> in the repository for the complete contract.</p>
+
 ## Sources
 
 - `src/launcher.ts`
@@ -44,3 +62,5 @@ const child = spawn(process.execPath, [
 - `package.json`
 - `src/extension-host/host-status.ts`
 - `test/rpc/managed-native.integration.test.mjs`
+- `src/skill-diagnostics.ts`
+- `test/rpc/skill-diagnostics.integration.test.mjs`
