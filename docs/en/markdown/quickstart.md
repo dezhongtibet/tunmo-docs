@@ -10,7 +10,7 @@ pnpm check:deps</code></pre><p>Check out the commit pinned by the main repositor
 
 ## Start the process
 
-<pre><code class="language-bash">pnpm start -- --session-id docs-demo-001 --cwd /absolute/path/to/project</code></pre><p>Replace the example path with your actual project directory. A session ID may contain only letters, digits, periods, underscores, and hyphens, and must start and end with a letter or digit. Assign a unique ID to each client task.</p><aside class="note"><strong>Usage note</strong><p>This entry point runs an RPC process, not a terminal chat interface. The launcher trusts the project directory you supply. Project extensions run with the current user's permissions, so use a trusted workspace.</p></aside>
+<pre><code class="language-bash">pnpm start -- --session-id docs-demo-001 --cwd /absolute/path/to/project</code></pre><p>Replace the example path with your actual project directory. A session ID may contain only letters, digits, periods, underscores, and hyphens, and must start and end with a letter or digit. Assign a unique ID to each client task.</p><aside class="note"><strong>Usage note</strong><p>This entry point runs an RPC process, not a terminal chat interface. Project directories are untrusted by default, so project settings and extensions are not loaded. After the user trusts the project, add --trusted-project with the same directory as --cwd. Project extensions run with the current user's permissions.</p></aside>
 
 ## Wait for readiness and send a message
 

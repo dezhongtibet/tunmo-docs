@@ -10,7 +10,7 @@ pnpm check:deps</code></pre><p>按主仓库锁定提交检出，不用 <code>--r
 
 ## 启动进程
 
-<pre><code class="language-bash">pnpm start -- --session-id docs-demo-001 --cwd /absolute/path/to/project</code></pre><p>将示例路径替换为真实项目目录。会话 ID 只能包含字母、数字、点、下划线和连字符，首尾必须为字母或数字。每个客户端任务分配唯一 ID。</p><aside class="note"><strong>使用提示</strong><p>该入口运行 RPC 进程，不是终端聊天界面。启动器信任传入的项目目录；项目扩展会以当前用户权限执行，请使用可信工作区。</p></aside>
+<pre><code class="language-bash">pnpm start -- --session-id docs-demo-001 --cwd /absolute/path/to/project</code></pre><p>将示例路径替换为真实项目目录。会话 ID 只能包含字母、数字、点、下划线和连字符，首尾必须为字母或数字。每个客户端任务分配唯一 ID。</p><aside class="note"><strong>使用提示</strong><p>该入口运行 RPC 进程，不是终端聊天界面。项目目录默认不授权，不加载项目设置和项目扩展；用户信任项目后追加 --trusted-project 与 --cwd 相同的目录。项目扩展会以当前用户权限执行。</p></aside>
 
 ## 确认就绪并发送消息
 

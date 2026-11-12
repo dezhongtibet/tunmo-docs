@@ -9,7 +9,7 @@
   <link rel="alternate" hreflang="en" href="en/quickstart.html">
   <title>安装与快速开始 · Tunmo Agent 文档</title>
   <link rel="stylesheet" href="assets/styles.css?v=7cacecbd1a51">
-  <script src="assets/search-index.js?v=06af8e8ef136" defer></script>
+  <script src="assets/search-index.js?v=1c2868a19850" defer></script>
   <script src="assets/app.js?v=29a07a919544" defer></script>
   <script src="assets/versions.js?v=a918e94225c3" defer></script>
 </head>
@@ -86,7 +86,7 @@
         <section><h2 id="section-1">准备环境<a class="anchor" href="#section-1" aria-label="准备环境的链接">#</a></h2><p>要求 Node.js ≥ 24.0.0、pnpm ≥ 12.0.0。完整离线回归已验证 Node 24.0.0、24.21.0、25.9.0 和 26.10.0；未测试的未来版本仍需单独验证。以下命令在已取得的 tunmo-agent 仓库根目录执行。</p><p><code>optional-extensions/</code> 固定到私有 <code>dezhongtibet/tunmo-plugins</code> 仓库中的指定提交；源码安装、可选模块 CLI 与完整构建需要该内容。先取得插件仓库读取权限并配置自己的 Git 认证，再运行：</p><pre><code class="language-bash">git submodule update --init --recursive
 pnpm install --frozen-lockfile
 pnpm check:deps</code></pre><p>按主仓库锁定提交检出，不用 <code>--remote</code> 无意升级插件。GitHub 源码 ZIP 不包含子模块文件；没有访问权限时，向维护者取得匹配版本的完整发行资源，不将公开主仓库视为开箱即用的完整安装包。项目 CI 使用单独的只读 <code>TUNMO_PLUGINS_READ_TOKEN</code>，普通 fork 的默认 token 无法读取该私有仓库。</p><p>Windows 源码环境还需运行 <code>node scripts/build-windows-helper.mjs</code> 生成进程监督器。预构建发行包应包含对应平台的监督器；不要混用不同架构的 Agent Node 与 Runtime。</p></section>
-        <section><h2 id="section-2">启动进程<a class="anchor" href="#section-2" aria-label="启动进程的链接">#</a></h2><pre><code class="language-bash">pnpm start -- --session-id docs-demo-001 --cwd /absolute/path/to/project</code></pre><p>将示例路径替换为真实项目目录。会话 ID 只能包含字母、数字、点、下划线和连字符，首尾必须为字母或数字。每个客户端任务分配唯一 ID。</p><aside class="note"><strong>使用提示</strong><p>该入口运行 RPC 进程，不是终端聊天界面。启动器信任传入的项目目录；项目扩展会以当前用户权限执行，请使用可信工作区。</p></aside></section>
+        <section><h2 id="section-2">启动进程<a class="anchor" href="#section-2" aria-label="启动进程的链接">#</a></h2><pre><code class="language-bash">pnpm start -- --session-id docs-demo-001 --cwd /absolute/path/to/project</code></pre><p>将示例路径替换为真实项目目录。会话 ID 只能包含字母、数字、点、下划线和连字符，首尾必须为字母或数字。每个客户端任务分配唯一 ID。</p><aside class="note"><strong>使用提示</strong><p>该入口运行 RPC 进程，不是终端聊天界面。项目目录默认不授权，不加载项目设置和项目扩展；用户信任项目后追加 --trusted-project 与 --cwd 相同的目录。项目扩展会以当前用户权限执行。</p></aside></section>
         <section><h2 id="section-3">确认就绪并发送消息<a class="anchor" href="#section-3" aria-label="确认就绪并发送消息的链接">#</a></h2><p>stdout 每行一个 JSON 对象，stderr 输出诊断。收到 <code>extension_ui_request</code>、<code>method: notify</code> 且消息包含 <code>tunmo-agent ready</code> 后，向 stdin 逐行写入：</p><pre><code class="language-json">{&quot;id&quot;:&quot;state-1&quot;,&quot;type&quot;:&quot;get_state&quot;}
 {&quot;id&quot;:&quot;commands-1&quot;,&quot;type&quot;:&quot;get_commands&quot;}
 {&quot;id&quot;:&quot;prompt-1&quot;,&quot;type&quot;:&quot;prompt&quot;,&quot;message&quot;:&quot;请介绍当前项目，并说明你可以使用的能力。&quot;}</code></pre><p>模型请求需要有效的模型与凭据配置。进程就绪只代表初始化完成，不代表提供商凭据已经可用。客户端应逐行处理返回和流式事件，不能把一次数据块当成完整 JSON。</p></section>
